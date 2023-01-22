@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2023 at 08:59 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Jan 22, 2023 at 05:15 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,16 +29,16 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `student` (
   `id` int(11) NOT NULL,
-  `stdid` varchar(255) NOT NULL,
-  `prefix` varchar(255) NOT NULL,
+  `std_id` varchar(255) NOT NULL,
+  `prefix` varchar(255) DEFAULT NULL,
   `fname` varchar(255) NOT NULL,
   `lname` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `phonenumber` varchar(11) NOT NULL,
-  `stdpic` varchar(255) NOT NULL,
-  `createdate` datetime NOT NULL,
-  `updatedate` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(11) DEFAULT NULL,
+  `std_pic` varchar(255) NOT NULL,
+  `cr_time` datetime NOT NULL,
+  `up_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -48,13 +48,13 @@ CREATE TABLE `student` (
 
 CREATE TABLE `subject` (
   `id` int(11) NOT NULL,
-  `id_sub` varchar(255) NOT NULL,
+  `sub_id` varchar(255) NOT NULL,
   `id_techer` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `detail` text DEFAULT NULL,
-  `createdate` datetime NOT NULL,
-  `updatedate` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `cr_time` datetime NOT NULL,
+  `up_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -64,11 +64,11 @@ CREATE TABLE `subject` (
 
 CREATE TABLE `sub_std` (
   `id` int(11) NOT NULL,
-  `sub_id` int(11) NOT NULL,
-  `std_id` int(11) NOT NULL,
+  `id_subject` int(11) NOT NULL,
+  `id_student` int(11) NOT NULL,
   `createdate` datetime NOT NULL,
   `updatedate` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -78,14 +78,23 @@ CREATE TABLE `sub_std` (
 
 CREATE TABLE `teacher` (
   `id` int(11) NOT NULL,
-  `prefix` varchar(255) NOT NULL,
-  `fname` varchar(255) NOT NULL,
-  `lname` varchar(255) NOT NULL,
+  `prefix` varchar(255) DEFAULT NULL,
+  `fname` varchar(255) DEFAULT NULL,
+  `lname` varchar(255) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
-  `phonenumber` char(11) NOT NULL,
-  `createdate` datetime NOT NULL,
-  `updatedate` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `phone` varchar(11) DEFAULT NULL,
+  `profile` varchar(255) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `cr_time` datetime NOT NULL,
+  `up_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `teacher`
+--
+
+INSERT INTO `teacher` (`id`, `prefix`, `fname`, `lname`, `email`, `phone`, `profile`, `password`, `cr_time`, `up_time`) VALUES
+(1, NULL, NULL, NULL, 'test@gmail.com', NULL, NULL, '123456', '2023-01-22 23:06:41', NULL);
 
 --
 -- Indexes for dumped tables
@@ -109,8 +118,8 @@ ALTER TABLE `subject`
 --
 ALTER TABLE `sub_std`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `std` (`std_id`),
-  ADD KEY `sub` (`sub_id`);
+  ADD KEY `std` (`id_student`),
+  ADD KEY `sub` (`id_subject`);
 
 --
 -- Indexes for table `teacher`
@@ -144,7 +153,7 @@ ALTER TABLE `sub_std`
 -- AUTO_INCREMENT for table `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -160,8 +169,8 @@ ALTER TABLE `subject`
 -- Constraints for table `sub_std`
 --
 ALTER TABLE `sub_std`
-  ADD CONSTRAINT `std` FOREIGN KEY (`std_id`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `sub` FOREIGN KEY (`sub_id`) REFERENCES `subject` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `std` FOREIGN KEY (`id_student`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `sub` FOREIGN KEY (`id_subject`) REFERENCES `subject` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
