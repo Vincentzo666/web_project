@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2023 at 05:15 PM
+-- Generation Time: Jan 23, 2023 at 09:02 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -84,6 +84,7 @@ CREATE TABLE `teacher` (
   `email` varchar(255) NOT NULL,
   `phone` varchar(11) DEFAULT NULL,
   `profile` varchar(255) DEFAULT NULL,
+  `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `cr_time` datetime NOT NULL,
   `up_time` datetime DEFAULT NULL
@@ -93,8 +94,8 @@ CREATE TABLE `teacher` (
 -- Dumping data for table `teacher`
 --
 
-INSERT INTO `teacher` (`id`, `prefix`, `fname`, `lname`, `email`, `phone`, `profile`, `password`, `cr_time`, `up_time`) VALUES
-(1, NULL, NULL, NULL, 'test@gmail.com', NULL, NULL, '123456', '2023-01-22 23:06:41', NULL);
+INSERT INTO `teacher` (`id`, `prefix`, `fname`, `lname`, `email`, `phone`, `profile`, `username`, `password`, `cr_time`, `up_time`) VALUES
+(15, NULL, NULL, NULL, 'thanawat.la.62@ubu.ac.th', NULL, NULL, 'jomtap', '111111', '2023-01-23 14:02:35', NULL);
 
 --
 -- Indexes for dumped tables
@@ -153,7 +154,7 @@ ALTER TABLE `sub_std`
 -- AUTO_INCREMENT for table `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables

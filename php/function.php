@@ -3,12 +3,8 @@ class lms{
 	private $host  = 'localhost';
     private $user  = 'root';
     private $password   = "";
-    private $database  = "project";   
-	private $teacherTable = 'teacher';	
-    private $subjectTable = 'subject';
-	private $studentTable = 'student';
-    private $sub_stdTable = 'sub_std';
-	private $dbConnect = false;
+    private $database  = "project";
+	public $dbConnect = false;
     
     public function __construct(){
         if(!$this->dbConnect){ 
@@ -20,8 +16,49 @@ class lms{
             }
         }
     }
-	private function getData($sqlQuery) {
-		$result = mysqli_query($this->dbConnect, $sqlQuery);
+		
+	public function insert($table,$para=array()){
+		
+		$table_columns = implode(',', array_keys($para));
+		$table_value = implode("','", $para);
+
+		$sql="INSERT INTO $table($table_columns) VALUES('$table_value')";
+
+		return $this->dbConnect->query($sql);
+	}
+
+	public function update($table,$para=array(),$id){
+		
+		$args = array();
+
+		foreach ($para as $key => $value) {
+			$args[] = "$key = '$value'"; 
+		}
+
+		$sql="UPDATE  $table SET " . implode(',', $args);
+
+		$sql .=" WHERE $id";
+
+		return $this->dbConnect->query($sql);
+	}
+
+	public function delete($table,$id){
+		
+		$sql="DELETE FROM $table";
+		$sql .=" WHERE $id ";
+		$sql;
+		return $this->dbConnect->query($sql);
+	}
+
+	public function select($table,$rows="*",$where = null){
+		
+		if ($where != null) {
+			$sql="SELECT $rows FROM $table WHERE $where";
+		}else{
+			$sql="SELECT $rows FROM $table";
+		}
+		$result = $this->dbConnect->query($sql);
+		
 		if(!$result){
 			die('Error in query: '. mysqli_error());
 		}
@@ -30,27 +67,18 @@ class lms{
 			$data[]=$row;            
 		}
 		return $data;
+
 	}
-	public function loginUsers($email, $password){
-		$sqlQuery = "
-			SELECT id, email, first_name, last_name, address, mobile 
-			FROM ".$this->invoiceUserTable." 
-			WHERE email='".$email."' AND password='".$password."'";
-        return  $this->getData($sqlQuery);
-	}	
+
 	public function checkLoggedIn(){
-		if(!$_SESSION['userid']) {
-			header("Location:index.php");
+		if(!$_SESSION['id_teacher']) {
+			echo "<script>window.location.href='auth/login.php';</script>";
+			exit;
 		}
-	}		
-	public function RegisterTeacher($email,$password){
-		date_default_timezone_set('Asia/Bangkok');
-		$date = date("Y-m-d H:i:s");
-		$c_email = mysqli_real_escape_string($this->dbConnect, $email);
-		$c_password = mysqli_real_escape_string($this->dbConnect, $password);
-		$sqlInsert = "INSERT INTO $this->teacherTable (email, password, cr_time)
-					VALUES ('$c_email', '$c_password', '$date')";		
-		return mysqli_query($this->dbConnect, $sqlInsert);
-	}	
+	}
+	
+	public function __destruct(){
+		$this->dbConnect->close();
+	}
 }
 ?>

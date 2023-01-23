@@ -13,7 +13,7 @@ session_start();
     </title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../css/style.css">
+    <!-- <link rel="stylesheet" href="../css/style.css"> -->
     <!-- CSS -->
 
     <!-- jQuery -->
@@ -46,13 +46,17 @@ session_start();
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-
     <!-- Data table -->
 
+    <!-- ajax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!-- ajax -->
 
 </head>
 
 <body>
     <?php
     include("alert.php");
+    date_default_timezone_set('Asia/Bangkok');
+	$date = date("Y-m-d H:i:s");
     ?>
