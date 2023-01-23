@@ -10,26 +10,36 @@ if(isset($_POST["register"]) && $_POST["register"]=='register'){
         $username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_username']));
         $password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_password']));
 
-        $check_email = $lms->select('teacher',"*","email='$email'"); 
+        $check_email = $lms->select('teacher',"*","email='$email'");
         if(!empty($check_email)) {
             // echo "<script>console.log('yess')</script>";
-            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว กรุณาลองใหม่อีกครั้ง!";
+            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว กรุณาใช้อีเมลล์อื่น!";
             echo "<script>window.history.back();</script>";
             exit;
             
         } else {
             // echo "<script>console.log('noo')</script>";
-            $register = $lms->insert('teacher',['email'=>$email,'username'=>$username,'password'=>$password,'cr_time'=>$date]); 
-            if(!empty($register)) {
-                $_SESSION['success'] = "สมัครสมาชิกสำเร็จ!";
-                echo "<script>window.location.href='login.php';</script>";
-                exit;
-                
-            } else {
-                $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
+            $check_username = $lms->select('teacher',"*","username='$username'");
+            if(!empty($check_username)) {
+                // echo "<script>console.log('yess')</script>";
+                $_SESSION['error'] = "ยูสเซอร์เนมนี้มีในระบบแล้ว กรุณาใช้ยูสเซอร์เนมอื่น!";
                 echo "<script>window.history.back();</script>";
                 exit;
+                
+            }else{
+                $register = $lms->insert('teacher',['email'=>$email,'username'=>$username,'password'=>$password,'cr_time'=>$date]); 
+                if(!empty($register)) {
+                    $_SESSION['success'] = "สมัครสมาชิกสำเร็จ!";
+                    echo "<script>window.location.href='login.php';</script>";
+                    exit;
+                    
+                } else {
+                    $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
+                    echo "<script>window.history.back();</script>";
+                    exit;
+                }
             }
+            
         }   
     }
     exit;
