@@ -14,6 +14,7 @@ if(isset($_POST["login"]) && $_POST["login"]=='login'){
             // echo "<script>console.log('yess')</script>";
             $_SESSION['success'] = "เข้าสู่ระบบสำเร็จ!";
             $_SESSION['id_teacher'] = $login[0]['id'];
+            $_SESSION['name_teacher'] = $login[0]['fname']." ".$login[0]['lname'];
             echo "<script>window.location.href='../index.php';</script>";
             exit;
             
@@ -26,6 +27,8 @@ if(isset($_POST["login"]) && $_POST["login"]=='login'){
     }
     exit;
 }
+session_unset();
+session_destroy();
 ?>
 <style>
 .gradient-custom {

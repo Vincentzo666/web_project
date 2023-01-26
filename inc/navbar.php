@@ -4,7 +4,7 @@
         class="rounded-circle" ;> -->
         <img src="<?= $profile ?>" alt="profile" width="35" height="35" class="rounded-circle" ;>
         <!-- <h2 style="margin:0 0 0 10px ;"><?php //echo $user['fname'] . " " . $user['lname'] ?></h2> -->
-        <h3 class=" ms-3 mb-0 pb-1">ทดสอบ ระบบ</h3>
+        <h3 class=" ms-3 mb-0 pb-1"><?=  $_SESSION['name_teacher'] ?></h3>
         <button type="button" class="btn btn-primary btn-sm ms-3">Edit Account</button>
 
     </div>
