@@ -1,7 +1,7 @@
 <?php 
 include("../inc/header.php");
 include("../php/function.php");
-if(isset($_POST["login"]) && $_POST["login"]=='login'){
+if(isset($_POST["action"]) && $_POST["action"]=='login'){
     // echo "<script>console.log('1111')</script>";
     if (!empty($_POST['login_username']) && !empty($_POST['login_password'])) {
         // echo "<script>console.log('2222')</script>";
@@ -66,7 +66,7 @@ session_destroy();
                                         id="login_password" placeholder="Password" minlength="6" required>
                                     <label for="floatingPassword">Password</label>
                                 </div>
-                                <input type="hidden" name="login" value="login">
+                                <input type="hidden" name="action" value="login">
                                 <button class=" fw-bold btn btn-outline-light btn-lg px-4" type="submit">Login</button>
                             </form>
                         </div>

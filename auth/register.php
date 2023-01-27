@@ -1,7 +1,7 @@
 <?php 
 include("../inc/header.php");
 include("../php/function.php");
-if(isset($_POST["register"]) && $_POST["register"]=='register'){
+if(isset($_POST["action"]) && $_POST["action"]=='register'){
     // echo "<script>console.log('1111')</script>";
     if (!empty($_POST['register_email']) && !empty($_POST['register_password']) && !empty($_POST['register_username'])
     && !empty($_POST['register_fname'])&& !empty($_POST['register_lname'])) {
@@ -16,7 +16,7 @@ if(isset($_POST["register"]) && $_POST["register"]=='register'){
         $check_email = $lms->select('teacher',"*","email='$email'");
         if(!empty($check_email)) {
             // echo "<script>console.log('yess')</script>";
-            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว กรุณาใช้อีเมลล์อื่น!";
+            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว!";
             echo "<script>window.history.back();</script>";
             exit;
             
@@ -25,7 +25,7 @@ if(isset($_POST["register"]) && $_POST["register"]=='register'){
             $check_username = $lms->select('teacher',"*","username='$username'");
             if(!empty($check_username)) {
                 // echo "<script>console.log('yess')</script>";
-                $_SESSION['error'] = "ชื่อผู้ใช้นี้มีในระบบแล้ว กรุณาใช้ชื่ออื่น!";
+                $_SESSION['error'] = "ชื่อผู้ใช้นี้มีในระบบแล้ว!";
                 echo "<script>window.history.back();</script>";
                 exit;
                 
@@ -98,7 +98,7 @@ if(isset($_POST["register"]) && $_POST["register"]=='register'){
                                         id="register_password" placeholder="Password" minlength="6" required>
                                     <label for="floatingPassword">Password</label>
                                 </div>
-                                <input type="hidden" name="register" value="register">
+                                <input type="hidden" name="action" value="register">
                                 <button class=" fw-bold btn btn-outline-light btn-lg px-5" id="submit_register"
                                     type="submit">Register</button>
                             </form>

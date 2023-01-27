@@ -12,16 +12,21 @@ if(!isset($_SESSION['id_teacher'])){
     echo "<script>window.location.href='auth/login.php';</script>";
     exit;
 }
-$profile ="image/profile/cat.png";
+
+$lms = new lms();
+$id_teacher = $_SESSION["id_teacher"];
+
 include("inc/navbar.php");
-?>
-<?php 
+
     $page = isset($_GET['page']) ? $_GET['page'] : '';
     $sw_page='';
     if ($page) {
         switch ($page) { 
             case "teacher_edit":
                 include("view/teacher_edit.php");
+                break;
+            case "subject_list":
+                include("view/subject_list.php");
                 break;
             case "subject_add":
                 include("view/subject_add.php");
@@ -46,8 +51,5 @@ include("inc/navbar.php");
         include("view/subject_list.php");
     }
 
-?>
-
-<?php 
 include("inc/footer.php");
 ?>
