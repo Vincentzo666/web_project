@@ -9,7 +9,7 @@
             <a class="btn btn-info px-md-4 rounded-3 border-primary" href="?page=subject_add">
                 <i class="fa-solid fa-file-circle-plus"></i>&nbsp;เพิ่มรายวิชา</a>
         </div>
-        <div class="p-3 p-md-5 bg-light rounded-5 shadow-lg">
+        <div class="px-5 py-4 bg-light rounded-5 shadow-lg">
             <div class="navbar mb-3">
                 <div class="navbar-brand d-flex align-items-center ms-4">
                     <label for="search">ค้นหารายวิชา</label>
@@ -26,25 +26,23 @@
                 </div>
             </div>
             <div class=" row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
-                <?php for($i=0;$i<11;$i++){ ?>
+                <?php 
+                $subject_page = $lms->pagination('subject','*',"id_teacher='$id_teacher'",8);
+                foreach($subject_page[0] as $subject_list){ 
+                    if($subject_list['image']!=''){$img_sj="upload/img_subject/".$subject_list['image'];
+                    }else{$img_sj = $lms->getRandomImage();}
+                ?>
                 <div class="col">
                     <div class="card shadow-sm">
-                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                            xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                            preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef"
-                                dy=".3em">Thumbnail</text>
-                        </svg>
-
+                        <img src="<?= $img_sj?>" style="width: 287px; height: 120px; object-fit: cover;">
                         <div class="card-body">
-                            <p class="card-text">This is a wider card with supporting text below as a natural
-                                lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <div class="d-flex justify-content-between align-items-center">
+                            <h6 class="card-text"><?= $subject_list['name'];?></h6>
+                            <p><?= $subject_list['detail'];?></p>
+                            <div class=" d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                    <button type="button" class="btn btn-sm btn-outline-success">View</button>
                                     <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
                                 </div>
                                 <small class="text-muted">9 mins</small>
                             </div>
@@ -52,6 +50,9 @@
                     </div>
                 </div>
                 <?php } ?>
+            </div>
+            <div class="col-12 pt-4 d-flex justify-content-end">
+                <?php echo $subject_page[1];?>
             </div>
         </div>
     </div>

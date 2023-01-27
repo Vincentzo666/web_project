@@ -76,7 +76,88 @@ class lms{
 			exit;
 		}
 	}
+
+	public function pagination($table,$rows="*",$where = null,$page_rows=10){
+		
+		$row=$this->select($table,'COUNT(id)');
+		$rows = $row[0]['COUNT(id)'];
+		$last = ceil($rows/$page_rows);
+		
+		if($last < 1){
+			$last = 1;
+		}
+		
+		$pagenum = 1;
 	
+		if(isset($_GET['pn'])){
+			$pagenum = preg_replace('#[^0-9]#', '', $_GET['pn']);
+		}
+	
+		if ($pagenum < 1) {
+			$pagenum = 1;
+		}
+		else if ($pagenum > $last) {
+			$pagenum = $last;
+		}
+	
+		$limit = 'LIMIT ' .($pagenum - 1) * $page_rows .',' .$page_rows;
+		$sql="SELECT * from  $table $limit";
+		$result = $this->dbConnect->query($sql);
+	
+		$paginationCtrls = '';
+	
+		if($last != 1){
+			
+			$paginationCtrls .= '<nav aria-label="Page navigation"><ul class="pagination">';
+ 
+			if ($pagenum > 1) {
+				$previous = $pagenum - 1;
+				$paginationCtrls .= '<li class="page-item"><a href="'.$_SERVER['PHP_SELF'].'?pn='.$previous.'" class="page-link">Previous</a></li>';
+		 
+				for($i = $pagenum-4; $i < $pagenum; $i++){
+					if($i > 0){
+						$paginationCtrls .= '<li class="page-item"><a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'" class="page-link">'.$i.'</a></li>';
+					}
+				}
+			}
+		 
+			$paginationCtrls .= '<li class="page-item"><a class="page-link active" aria-current="page">'.$pagenum.'</a></li>';
+		 
+			for($i = $pagenum+1; $i <= $last; $i++){
+				$paginationCtrls .= '<li class="page-item"><a href="'.$_SERVER['PHP_SELF'].'?pn='.$i.'" class="page-link">'.$i.'</a></li>';
+				if($i >= $pagenum+4){
+					break;
+				}
+			}
+		 
+			if ($pagenum != $last) {
+				$next = $pagenum + 1;
+				$paginationCtrls .= '<li class="page-item"><a href="'.$_SERVER['PHP_SELF'].'?pn='.$next.'" class="page-link">Next</a></li>';
+			}
+			
+			$paginationCtrls .='</ul></nav>';
+		}
+		
+		return array($result,$paginationCtrls);
+	}
+
+	public function getRandomImage(){
+		
+		$dir_path = "image/bg_subject";
+		$files = scandir($dir_path);
+		$count = count($files);
+		if($count > 2){
+			$index = rand(2, ($count-1));
+			$filename = $files[$index];
+			return "image/bg_subject/".$filename;
+			
+		} else {
+			
+			$filename = $files[0];
+			return "image/bg_subject/".$filename;
+		}
+	}
+
 	public function __destruct(){
 		$this->dbConnect->close();
 	}
