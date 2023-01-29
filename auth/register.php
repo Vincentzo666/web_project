@@ -1,11 +1,14 @@
 <?php 
 include("../inc/header.php");
 include("../php/function.php");
-if(isset($_POST["register"]) && $_POST["register"]=='register'){
+if(isset($_POST["action"]) && $_POST["action"]=='register'){
     // echo "<script>console.log('1111')</script>";
-    if (!empty($_POST['register_email']) && !empty($_POST['register_password']) && !empty($_POST['register_username'])) {
+    if (!empty($_POST['register_email']) && !empty($_POST['register_password']) && !empty($_POST['register_username'])
+    && !empty($_POST['register_fname'])&& !empty($_POST['register_lname'])) {
         // echo "<script>console.log('2222')</script>";
         $lms = new lms();
+        $fname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_fname']));
+        $lname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_lname']));
         $email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_email']));
         $username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_username']));
         $password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_password']));
@@ -13,7 +16,7 @@ if(isset($_POST["register"]) && $_POST["register"]=='register'){
         $check_email = $lms->select('teacher',"*","email='$email'");
         if(!empty($check_email)) {
             // echo "<script>console.log('yess')</script>";
-            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว กรุณาใช้อีเมลล์อื่น!";
+            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว!";
             echo "<script>window.history.back();</script>";
             exit;
             
@@ -22,12 +25,12 @@ if(isset($_POST["register"]) && $_POST["register"]=='register'){
             $check_username = $lms->select('teacher',"*","username='$username'");
             if(!empty($check_username)) {
                 // echo "<script>console.log('yess')</script>";
-                $_SESSION['error'] = "ยูสเซอร์เนมนี้มีในระบบแล้ว กรุณาใช้ยูสเซอร์เนมอื่น!";
+                $_SESSION['error'] = "ชื่อผู้ใช้นี้มีในระบบแล้ว!";
                 echo "<script>window.history.back();</script>";
                 exit;
                 
             }else{
-                $register = $lms->insert('teacher',['email'=>$email,'username'=>$username,'password'=>$password,'cr_time'=>$date]); 
+                $register = $lms->insert('teacher',['fname'=>$fname,'lname'=>$lname,'email'=>$email,'username'=>$username,'password'=>$password,'cr_time'=>$date]); 
                 if(!empty($register)) {
                     $_SESSION['success'] = "สมัครสมาชิกสำเร็จ!";
                     echo "<script>window.location.href='login.php';</script>";
@@ -65,11 +68,21 @@ if(isset($_POST["register"]) && $_POST["register"]=='register'){
                 <div class="card bg-dark text-black" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
 
-                        <div class="mb-md-5 mt-md-4 pb-3">
+                        <div class="mb-2 md-4 pb-3 ">
 
                             <h2 class="fw-bold mb-2 text-uppercase text-white">Register</h2>
-                            <p class="text-white-50 mb-5">Please enter email and password!</p>
+                            <p class="text-white-50 mb-3">Please enter email and password!</p>
                             <form method="post" action="">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" name="register_fname" id="register_fname"
+                                        placeholder="First name" required>
+                                    <label for="floatingInput">First name</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" name="register_lname" id="register_lname"
+                                        placeholder="Last name" required>
+                                    <label for="floatingInput">Last name</label>
+                                </div>
                                 <div class="form-floating mb-3">
                                     <input type="email" class="form-control" name="register_email" id="register_email"
                                         placeholder="Email address" required>
@@ -80,18 +93,18 @@ if(isset($_POST["register"]) && $_POST["register"]=='register'){
                                         id="register_username" placeholder="Username" required>
                                     <label for="floatingInput">Username</label>
                                 </div>
-                                <div class="form-floating mb-5">
+                                <div class="form-floating mb-4">
                                     <input type="password" class="form-control" name="register_password"
                                         id="register_password" placeholder="Password" minlength="6" required>
                                     <label for="floatingPassword">Password</label>
                                 </div>
-                                <input type="hidden" name="register" value="register">
+                                <input type="hidden" name="action" value="register">
                                 <button class=" fw-bold btn btn-outline-light btn-lg px-5" id="submit_register"
                                     type="submit">Register</button>
                             </form>
 
                         </div>
-                        <div class="mb-5">
+                        <div class="mb-0">
                             <p class="mb-0 text-white">I have an account &nbsp;<a href="login.php"
                                     class="text-danger fw-bold">Back to Login</a>
                             </p>

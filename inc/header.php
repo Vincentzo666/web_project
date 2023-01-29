@@ -53,10 +53,12 @@ session_start();
     <!-- ajax -->
 
 </head>
+<!-- style="background-color:#212529;" -->
 
-<body>
+<body class="bg-light">
     <?php
     include("alert.php");
     date_default_timezone_set('Asia/Bangkok');
 	$date = date("Y-m-d H:i:s");
+    $namedate = date("YmdHis");
     ?>

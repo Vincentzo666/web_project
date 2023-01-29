@@ -1,7 +1,7 @@
 <?php 
 include("../inc/header.php");
 include("../php/function.php");
-if(isset($_POST["login"]) && $_POST["login"]=='login'){
+if(isset($_POST["action"]) && $_POST["action"]=='login'){
     // echo "<script>console.log('1111')</script>";
     if (!empty($_POST['login_username']) && !empty($_POST['login_password'])) {
         // echo "<script>console.log('2222')</script>";
@@ -14,6 +14,7 @@ if(isset($_POST["login"]) && $_POST["login"]=='login'){
             // echo "<script>console.log('yess')</script>";
             $_SESSION['success'] = "เข้าสู่ระบบสำเร็จ!";
             $_SESSION['id_teacher'] = $login[0]['id'];
+            $_SESSION['name_teacher'] = $login[0]['fname']." ".$login[0]['lname'];
             echo "<script>window.location.href='../index.php';</script>";
             exit;
             
@@ -26,6 +27,8 @@ if(isset($_POST["login"]) && $_POST["login"]=='login'){
     }
     exit;
 }
+session_unset();
+session_destroy();
 ?>
 <style>
 .gradient-custom {
@@ -63,7 +66,7 @@ if(isset($_POST["login"]) && $_POST["login"]=='login'){
                                         id="login_password" placeholder="Password" minlength="6" required>
                                     <label for="floatingPassword">Password</label>
                                 </div>
-                                <input type="hidden" name="login" value="login">
+                                <input type="hidden" name="action" value="login">
                                 <button class=" fw-bold btn btn-outline-light btn-lg px-4" type="submit">Login</button>
                             </form>
                         </div>

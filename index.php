@@ -12,10 +12,44 @@ if(!isset($_SESSION['id_teacher'])){
     echo "<script>window.location.href='auth/login.php';</script>";
     exit;
 }
-$profile ="image/profile/cat.png";
-include("inc/navbar.php");
-?>
 
-<?php 
+$lms = new lms();
+$id_teacher = $_SESSION["id_teacher"];
+
+include("inc/navbar.php");
+
+    $page = isset($_GET['page']) ? $_GET['page'] : '';
+    $sw_page='';
+    if ($page) {
+        switch ($page) { 
+            case "teacher_edit":
+                include("view/teacher_edit.php");
+                break;
+            case "subject_list":
+                include("view/subject_list.php");
+                break;
+            case "subject_add":
+                include("view/subject_add.php");
+                break;
+            case "subject_edit":
+                include("view/subject_edit.php");
+                break;
+            case "student_list":
+                include("view/student_list.php");
+                break;
+            case "student_add":
+                include("view/student_add.php");
+                break;
+            case "student_edit":
+                include("view/student_edit.php");
+                break;
+            default:
+            include("view/subject_list.php");
+        }
+
+    }else{
+        include("view/subject_list.php");
+    }
+
 include("inc/footer.php");
 ?>
