@@ -6,6 +6,9 @@ if(isset($_POST['search'])){
     $_SESSION['subject_sx'] = " AND name LIKE '%$input_search%'";
     
 }
+if(!isset( $_SESSION['keyword_subject'])){
+    $_SESSION['keyword_subject'] = "";
+}
 $sqlx = '';
 if(isset($_SESSION['subject_sx'])){
     $sqlx = $_SESSION['subject_sx'];
@@ -14,7 +17,7 @@ if(isset($_SESSION['subject_sx'])){
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
         <div class="text-center text-md-start">
-            <h1>รายชื่อวิชา</h1>
+            <h1>รายชื่อผู้เรียน</h1>
             <a class="btn btn-info px-md-4 rounded-3 border-primary" href="?page=student_list">
                 <i class="fa-solid fa-address-book"></i>&nbsp;ดูรายชื่อนักศึกษา</a>
         </div>
