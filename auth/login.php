@@ -8,8 +8,9 @@ if(isset($_POST["action"]) && $_POST["action"]=='login'){
         $lms = new lms();
         $username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['login_username']));
         $password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['login_password']));
+        $en_password = $lms->encode($password);
         
-        $login = $lms->select('teacher',"*","username='$username' AND password='$password'"); 
+        $login = $lms->select('teacher',"*","username='$username' AND password='$en_password'"); 
         if(!empty($login)) {
             // echo "<script>console.log('yess')</script>";
             $_SESSION['success'] = "เข้าสู่ระบบสำเร็จ!";

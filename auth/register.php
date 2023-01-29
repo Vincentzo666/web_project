@@ -12,6 +12,7 @@ if(isset($_POST["action"]) && $_POST["action"]=='register'){
         $email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_email']));
         $username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_username']));
         $password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['register_password']));
+        $en_password = $lms->encode($password);
 
         $check_email = $lms->select('teacher',"*","email='$email'");
         if(!empty($check_email)) {
@@ -30,7 +31,7 @@ if(isset($_POST["action"]) && $_POST["action"]=='register'){
                 exit;
                 
             }else{
-                $register = $lms->insert('teacher',['fname'=>$fname,'lname'=>$lname,'email'=>$email,'username'=>$username,'password'=>$password,'cr_time'=>$date]); 
+                $register = $lms->insert('teacher',['fname'=>$fname,'lname'=>$lname,'email'=>$email,'username'=>$username,'password'=>$en_password,'cr_time'=>$date]); 
                 if(!empty($register)) {
                     $_SESSION['success'] = "สมัครสมาชิกสำเร็จ!";
                     echo "<script>window.location.href='login.php';</script>";
@@ -74,12 +75,12 @@ if(isset($_POST["action"]) && $_POST["action"]=='register'){
                             <p class="text-white-50 mb-3">Please enter email and password!</p>
                             <form method="post" action="">
                                 <div class="form-floating mb-3">
-                                    <input type="email" class="form-control" name="register_fname" id="register_fname"
+                                    <input type="text" class="form-control" name="register_fname" id="register_fname"
                                         placeholder="First name" required>
                                     <label for="floatingInput">First name</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="email" class="form-control" name="register_lname" id="register_lname"
+                                    <input type="text" class="form-control" name="register_lname" id="register_lname"
                                         placeholder="Last name" required>
                                     <label for="floatingInput">Last name</label>
                                 </div>
@@ -95,7 +96,10 @@ if(isset($_POST["action"]) && $_POST["action"]=='register'){
                                 </div>
                                 <div class="form-floating mb-4">
                                     <input type="password" class="form-control" name="register_password"
-                                        id="register_password" placeholder="Password" minlength="6" required>
+                                        id="register_password" placeholder="Password"
+                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                        title="a-Z ต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็กและตัวเลข(อย่างน้อย 8 ตัวอักษร)"
+                                        required>
                                     <label for="floatingPassword">Password</label>
                                 </div>
                                 <input type="hidden" name="action" value="register">
