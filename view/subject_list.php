@@ -6,6 +6,9 @@ if(isset($_POST['search'])){
     $_SESSION['subject_sx'] = " AND name LIKE '%$input_search%'";
     
 }
+if(!isset($_SESSION['keyword_subject'])){
+    $_SESSION['keyword_subject']='';
+}
 $sqlx = '';
 if(isset($_SESSION['subject_sx'])){
     $sqlx = $_SESSION['subject_sx'];
