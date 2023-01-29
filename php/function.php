@@ -1,10 +1,16 @@
 <?php
 class lms{
+	
+	public $dbConnect = false;
 	private $host  = 'localhost';
     private $user  = 'root';
     private $password   = "";
     private $database  = "project";
-	public $dbConnect = false;
+	private $ciphering = "AES-128-CTR";
+	private $options = 0;
+	private $key_iv = '1234567891011121';
+	private $key = 'KbPeShVmYq3t6w9z';
+	
     
     public function __construct(){
         if(!$this->dbConnect){ 
@@ -79,9 +85,8 @@ class lms{
 
 	public function pagination($table,$rows="*",$where = null,$page_rows=10){
 		
-		$row=$this->select($table,'COUNT(id)');
-		$rows = $row[0]['COUNT(id)'];
-		$last = ceil($rows/$page_rows);
+		$countrow=$this->select($table,'COUNT(id)',$where);
+		$last = ceil($countrow[0]['COUNT(id)']/$page_rows);
 		
 		if($last < 1){
 			$last = 1;
@@ -99,10 +104,15 @@ class lms{
 		else if ($pagenum > $last) {
 			$pagenum = $last;
 		}
-	
-		$limit = 'LIMIT ' .($pagenum - 1) * $page_rows .',' .$page_rows;
-		$sql="SELECT * from  $table $limit";
-		$result = $this->dbConnect->query($sql);
+
+		if(isset($_GET['sx'])){
+			$_SESSION['sx']=str_replace("+"," ",$_GET['sx']);
+		}
+		// echo "<script>console.log('{$_SESSION['sx']}')</script>";
+
+		$limit = ' LIMIT ' .($pagenum - 1) * $page_rows .',' .$page_rows;
+		$searchx = $where.' ORDER BY '.$_SESSION['sx'].$limit;
+		$result = $this->select($table,$rows,$searchx);
 	
 		$paginationCtrls = '';
 	
@@ -129,7 +139,6 @@ class lms{
 					break;
 				}
 			}
-		 
 			if ($pagenum != $last) {
 				$next = $pagenum + 1;
 				$paginationCtrls .= '<li class="page-item"><a href="'.$_SERVER['PHP_SELF'].'?pn='.$next.'" class="page-link">Next</a></li>';
@@ -156,6 +165,22 @@ class lms{
 			$filename = $files[0];
 			return "image/bg_subject/".$filename;
 		}
+	}
+
+	public function encode($message){
+
+
+		$encrypted = openssl_encrypt($message, $this->ciphering, $this->key, $this->options, $this->key_iv); 
+
+		return $encrypted;
+	}
+
+	public function decode($message){
+		
+		$decrypted = openssl_decrypt ($message, $this->ciphering, $this->key, $this->options, $this->key_iv); 
+	
+		return $decrypted;
+		
 	}
 
 	public function __destruct(){

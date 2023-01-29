@@ -19,7 +19,6 @@ $id_teacher = $_SESSION["id_teacher"];
 include("inc/navbar.php");
 
     $page = isset($_GET['page']) ? $_GET['page'] : '';
-    $sw_page='';
     if ($page) {
         switch ($page) { 
             case "teacher_edit":
