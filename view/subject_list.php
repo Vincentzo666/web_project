@@ -2,7 +2,7 @@
 $_SESSION['sx']='name ASC';
 if(isset($_POST['search'])){
     $input_search = $_POST['search'];
-    $_SESSION['keyword_subject'] = $_POST['search'];
+    $_SESSION['keyword_subject'] = $input_search;
     $_SESSION['subject_sx'] = " AND name LIKE '%$input_search%'";
     
 }
@@ -25,19 +25,19 @@ if(isset($_SESSION['subject_sx'])){
         <div class="px-5 py-4 bg-light rounded-5 shadow-lg">
             <div class="navbar mb-3">
                 <div class="navbar-brand ms-4 d-flex justify-content-start">
-                    <form action="" method=" post">
+                    <form action="" method="post">
                         <div class="d-flex justify-content-start">
                             <label for="search" class="pt-1">ค้นหารายวิชา</label>
                             <input type="search" class="form form-control mx-2" id="search" name="search"
                                 placeholder="Search..." aria-label="Search">
-                            <button type="submit" class="btn btn-primary">search</button>
+                            <button type="submit" class="btn btn-primary">ค้นหา/ รีเซ็ต</button>
                         </div>
                     </form>
                     <div class="d-flex justify-content-start ps-2">
-                        <a class="btn btn-warning" href="index.php">รีเซ็ต</a>
                         <h5 class="mb-0 pt-2 ps-3"
                             style="width:350px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                            ผลการค้นหาของ <?= $_SESSION['keyword_subject'] ?></h5>
+                            <?php if($_SESSION['keyword_subject']!=''){echo 'ผลการค้นหาของ '.$_SESSION['keyword_subject'];} ?>
+                        </h5>
                     </div>
                 </div>
                 <div class="dropdown">
