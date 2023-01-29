@@ -1,7 +1,7 @@
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
         <div class="text-center text-md-start">
-            <h1>รายชื่อวิชา</h1>
+            <h1>รายชื่อนักศึกษา</h1>
             <a class="btn btn-info px-md-4 rounded-3 border-primary" href="?page=subject_list">
                 <i class="fa-solid fa-address-book"></i>&nbsp;ดูรายวิชา</a>
         </div>
@@ -32,7 +32,7 @@
                                     ?>
                                 <tr>
                                     <td>
-                                        <img src="upload/img_student/<?= $student_list['std_id'] ?>"
+                                        <img src="upload/img_student/<?= $student_list['std_pic'] ?>"
                                             style=" width: 100px; height: 100px; object-fit: cover;">
                                     </td>
                                     <td>

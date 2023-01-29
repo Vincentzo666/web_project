@@ -1,13 +1,12 @@
 <?php 
     if(isset($_POST["action"]) && $_POST["action"]=='student_add'){
-            
+        
+        $student_id = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_id'])); 
         $student_prefix = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_prefix']));
-        $student_id = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_id']));
         $student_fname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_fname']));
         $student_lname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_lname']));
         $student_email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_email']));
         $student_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_phone']));
-        
 
         $check_student = $lms->select('student',"*","std_id='$student_id'");
         if(!empty($check_student)) {
@@ -30,7 +29,7 @@
                 if (in_array($fileType, $allowTypes)) {
                     if (move_uploaded_file($_FILES["student_img"]["tmp_name"], $targetFilePath)) {
                         
-                        $student_add = $lms->insert('student',['std_id'=>$student_id,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'std_pic'=>$fileName,'cr_time'=>$date]);
+                        $student_add = $lms->insert('student',['std_id'=>$student_id,'prefix'=>$student_prefix,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'std_pic'=>$fileName,'cr_time'=>$date]);
                         if(!empty($student_add)) {
                             // echo "<script>console.log('{$fileName}')</script>";
                             $_SESSION['success'] = "เพิ่มรายชื่อผู้เรียนสำเร็จ!";
@@ -61,21 +60,11 @@
                     
                 }
                 
-            } else {
+            }else{
                 
-                $student_add = $lms->insert('student',['std_id'=>$student_id,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'cr_time'=>$date]);
-                if(!empty($student_add)) {
-                            
-                    $_SESSION['success'] = "เพิ่มรายผู้เรียนสำเร็จ!";
-                    echo "<script>window.location.href='?page=student_list';</script>";
-                    exit;
-                    
-                }else {
-        
-                    $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
-                    echo "<script>window.history.back();</script>";
-                    exit;
-                }
+                $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบไฟล์ที่เลือก!";
+                echo "<script> window.history.back()</script>";
+                exit;
             }
         }
     }
@@ -93,7 +82,8 @@
                 <h2>เพิ่มรายชื่อผู้เรียน</h2>
             </div>
             <div class="col-sm-5 text-end">
-                <a class="btn btn-primary" href="?page=student_list"><i class="fa-regular fa-circle-left"></i>&nbsp;กลับ</a>
+                <a class="btn btn-primary" href="?page=student_list"><i
+                        class="fa-regular fa-circle-left"></i>&nbsp;กลับ</a>
             </div>
         </div>
 
@@ -101,13 +91,16 @@
             <div class="py-3 p-md-5 bg-light rounded-5 shadow-lg col-md-8">
                 <form action="?page=student_add" method="post" class="px-0 pt-3" enctype="multipart/form-data">
                     <div class="row mb-3 d-flex justify-content-center">
-                        <label for="input" class="col-sm-2 col-form-label">เพศ
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select name="student_prefix" id="student_prefix" class="col-sm-8" required>
-                            <option value="ชาย">ชาย</option>
-                            <option value="หญิง">หญิง</option>
-                        </select>
+                        <label for="input" class="col-sm-2 col-form-label">เพศ</label>
+                        <div class="col-sm-8">
+                            <div class="col-3">
+                                <select class="form-select " id="student_prefix" name="student_prefix">
+                                    <option value="">--เพศ--</option>
+                                    <option value="ชาย">ชาย</option>
+                                    <option value="หญิง">หญิง</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="row mb-3 d-flex justify-content-center">
                         <label for="input" class="col-sm-2 col-form-label">ชื่อ
@@ -134,27 +127,26 @@
                         </div>
                     </div>
                     <div class="row mb-3 d-flex justify-content-center">
-                        <label for="input" class="col-sm-2 col-form-label">อีเมล์
-                            <span class="text-danger">*</span></label>
+                        <label for="input" class="col-sm-2 col-form-label">อีเมล์</label>
                         <div class="col-sm-8">
                             <input type="email" class="form-control" id="student_email" name="student_email"
                                 placeholder="อีเมล์">
                         </div>
                     </div>
                     <div class="row mb-3 d-flex justify-content-center">
-                        <label for="input" class="col-sm-2 col-form-label">เบอร์โทรศัพท์
-                            <span class="text-danger">*</span></label>
+                        <label for="input" class="col-sm-2 col-form-label">เบอร์โทรศัพท์</label>
                         <div class="col-sm-8">
                             <input type="phone" class="form-control" id="student_phone" name="student_phone"
                                 placeholder="เบอร์โทรศัพท์">
                         </div>
                     </div>
                     <div class="row mb-3 d-flex justify-content-center ">
-                        <label for="input" class="col-sm-2 col-form-label">รูปภาพ</label>
+                        <label for="input" class="col-sm-2 col-form-label">รูปภาพ<span
+                                class="text-danger">*</span></label>
                         <div class="col-sm-8">
                             <input type="file" class="form-control" id="student_img" name="student_img"
                                 onchange="readURL(this);" required>
-                            <br><img id='preview' style="display:none; width: 300px; height: 150px; object-fit: cover;">
+                            <br><img id='preview' style="display:none; width: 300px; height: 300px; object-fit: cover;">
                         </div>
                     </div>
 

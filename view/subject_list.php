@@ -81,10 +81,13 @@ if(isset($_SESSION['subject_sx'])){
                                 style="height:20px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                                 <?= $subject_list['name'];?>
                             </h6>
-                            <p
-                                style="height:72px;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;">
-                                <?= $subject_list['detail'];?>
-                            </p>
+                            <?php 
+                            if($subject_list['detail']==''){
+                                echo '<p class="text-muted" style="height:72px;">คำอธิบายรายวิชา...</p>';
+                            }else{
+                                echo '<p style="height:72px;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;">
+                                '.$subject_list['detail'].'</p>';
+                            }?>
                             <div class=" d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-sm btn-outline-success">View</button>
