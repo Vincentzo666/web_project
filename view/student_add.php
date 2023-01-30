@@ -8,65 +8,71 @@
         $student_email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_email']));
         $student_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_phone']));
 
-        $check_student = $lms->select('student',"*","std_id='$student_id'");
-        if(!empty($check_student)) {
-            
-            $_SESSION['error'] = "รหัสผู้เรียนนี้มีในระบบแล้ว!";
-            echo "<script>window.history.back();</script>";
-            exit;
-        
-        }else{
-            
-            if (!empty($_FILES["student_img"]["name"])) {
+        if (!empty($_POST['student_id']) && !empty($_POST['student_fname'])
+        && !empty($_POST['student_lname'])) {
 
-                $targetDir = "upload/img_student/";
-                $temp = explode(".", $_FILES["student_img"]["name"]);
-                $fileName = 'student-'.$namedate. '.' . end($temp);
-                $targetFilePath = $targetDir . $fileName;
-                $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
-                $allowTypes = array('jpg', 'png', 'jpeg');
-
-                if (in_array($fileType, $allowTypes)) {
-                    if (move_uploaded_file($_FILES["student_img"]["tmp_name"], $targetFilePath)) {
-                        
-                        $student_add = $lms->insert('student',['std_id'=>$student_id,'prefix'=>$student_prefix,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'std_pic'=>$fileName,'cr_time'=>$date]);
-                        if(!empty($student_add)) {
-                            // echo "<script>console.log('{$fileName}')</script>";
-                            $_SESSION['success'] = "เพิ่มรายชื่อผู้เรียนสำเร็จ!";
-                            echo "<script>window.location.href='?page=student_list';</script>";
-                            exit;
-                            
-                        }else {
+            $check_student = $lms->select('student',"*","std_id='$student_id'");
+            
+            if(!empty($check_student)) {
                 
-                            $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
-                            unlink("upload/img_student/$fileName");
-                            echo "<script>window.history.back();</script>";
-                            exit;
-                        }
-                        
-                    }else {
-                
-                        $_SESSION['error'] = "เกิดข้อผิดพลาด! อัพโหลดไฟล์ไม่สำเร็จ!";
-                        echo "<script> window.history.back()</script>";
-                        exit;
-                        
-                    }
-                    
-                }else {
-        
-                    $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่รองรับนามสกุลไฟล์ชนิดนี้!";
-                    echo "<script> window.history.back()</script>";
-                    exit;
-                    
-                }
+                $_SESSION['error'] = "รหัสผู้เรียนนี้มีในระบบแล้ว!";
+                echo "<script>window.history.back();</script>";
+                exit;
                 
             }else{
-                
-                $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบไฟล์ที่เลือก!";
-                echo "<script> window.history.back()</script>";
-                exit;
-            }
+            
+                if (!empty($_FILES["student_img"]["name"])) {
+
+                    $targetDir = "upload/img_student/";
+                    $temp = explode(".", $_FILES["student_img"]["name"]);
+                    $fileName = 'student-'.$namedate. '.' . end($temp);
+                    $targetFilePath = $targetDir . $fileName;
+                    $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+                    $allowTypes = array('jpg', 'png', 'jpeg');
+
+                    if (in_array($fileType, $allowTypes)) {
+                        
+                        if (move_uploaded_file($_FILES["student_img"]["tmp_name"], $targetFilePath)) {
+                            
+                            $student_add = $lms->insert('student',['std_id'=>$student_id,'prefix'=>$student_prefix,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'std_pic'=>$fileName,'cr_time'=>$date]);
+                            
+                            if(!empty($student_add)) {
+                                
+                                $_SESSION['success'] = "เพิ่มรายชื่อผู้เรียนสำเร็จ!";
+                                echo "<script>window.location.href='?page=student_list';</script>";
+                                exit;
+                                
+                            }else {
+                                $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
+                                unlink("upload/img_student/$fileName");
+                                echo "<script>window.history.back();</script>";
+                                exit;
+                            }
+                            
+                        }else {
+                            $_SESSION['error'] = "เกิดข้อผิดพลาด! อัพโหลดไฟล์ไม่สำเร็จ!";
+                            echo "<script> window.history.back()</script>";
+                            exit;   
+                        } 
+                        
+                    }else {
+                        $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่รองรับนามสกุลไฟล์ชนิดนี้!";
+                        echo "<script> window.history.back()</script>";
+                        exit;
+                    }
+                    
+                }else{
+                    $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบไฟล์ที่เลือก!";
+                    echo "<script> window.history.back()</script>";
+                    exit;
+                }
+            }  
+             
+        }else{
+            whenerror();
+            exit;
         }
+        
     }
 ?>
 <div class="py-5 pt-3" style="background-color:#f0f8ff;">
@@ -74,6 +80,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php">หน้าหลัก</a></li>
+                <li class="breadcrumb-item"><a href="?page=student_list">รายชื่อชื่อผู้เรียน</a></li>
                 <li class="breadcrumb-item active" aria-current="page">เพิ่มรายชื่อผู้เรียน</li>
             </ol>
         </nav>
@@ -95,9 +102,10 @@
                         <div class="col-sm-8">
                             <div class="col-3">
                                 <select class="form-select " id="student_prefix" name="student_prefix">
-                                    <option value="">--เพศ--</option>
-                                    <option value="ชาย">ชาย</option>
-                                    <option value="หญิง">หญิง</option>
+                                    <option value="">--คำนำหน้า--</option>
+                                    <option value="นาย">นาย</option>
+                                    <option value="นาง">นาง</option>
+                                    <option value="นางสาว">นางสาว</option>
                                 </select>
                             </div>
                         </div>

@@ -15,6 +15,12 @@ if(!isset($_SESSION['id_teacher'])){
 
 $lms = new lms();
 $id_teacher = $_SESSION["id_teacher"];
+function whenerror(){
+		
+    $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
+    echo "<script>window.history.back();</script>";
+    exit;
+}
 
 include("inc/navbar.php");
 

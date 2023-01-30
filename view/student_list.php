@@ -3,7 +3,7 @@
         <div class="text-center text-md-start">
             <h1>รายชื่อนักศึกษา</h1>
             <a class="btn btn-info px-md-4 rounded-3 border-primary" href="?page=subject_list">
-                <i class="fa-solid fa-address-book"></i>&nbsp;ดูรายวิชา</a>
+                <i class="fa-solid fa-address-book"></i>&nbsp;ดูรายชื่อวิชา</a>
         </div>
         <div class="my-4 my-md-3 text-center text-md-end">
             <a class="btn btn-info px-md-4 rounded-3 border-primary" href="?page=student_add">

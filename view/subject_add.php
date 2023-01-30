@@ -70,8 +70,7 @@
                         
                     }else {
             
-                        $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
-                        echo "<script>window.history.back();</script>";
+                        whenerror();
                         exit;
                     }
                 }

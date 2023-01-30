@@ -23,7 +23,7 @@ if(isset($_SESSION['subject_sx'])){
         </div>
         <div class="my-4 my-md-3 text-center text-md-end">
             <a class="btn btn-info px-md-4 rounded-3 border-primary" href="?page=subject_add">
-                <i class="fa-solid fa-file-circle-plus"></i>&nbsp;เพิ่มรายวิชา</a>
+                <i class="fa-solid fa-file-circle-plus"></i>&nbsp;เพิ่มรายชื่อวิชา</a>
         </div>
         <div class="px-5 py-4 bg-light rounded-5 shadow-lg">
             <div class="navbar mb-3">
