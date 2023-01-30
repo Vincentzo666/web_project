@@ -2,9 +2,11 @@
     $teacher = $lms->select('teacher',"*","id='$id_teacher'");
 
     if(isset($_POST['action'])){
+        
         $action = $_POST['action'];
         
         switch ($action) { 
+            
             case "teacher_edit1":
                 
                 if (!empty($_FILES["teacher_profile"]["name"])) {
@@ -56,43 +58,22 @@
                 
             case "teacher_edit2":
                 
-                $student_prefix = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_prefix']));
-                $teacher_fname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_fname']));
-                $teacher_lname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_lname']));
-                $teacher_email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_email']));
-                $teacher_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_phone']));
-
                 if (!empty($_POST['teacher_fname'])&& !empty($_POST['teacher_lname'])) {
-                    
-                    $check_email1 = $lms->select('teacher',"email","id='$id_teacher'");
-                    
-                    if($check_email1[0]['email'] == $teacher_email) {
 
-                        $teacher_edit2 = $lms->update('teacher',['prefix'=>$student_prefix,'fname'=>$teacher_fname,'lname'=>$teacher_lname,'email'=>$teacher_email,'phone'=>$teacher_phone,'up_time'=>$date],"id='$id_teacher'"); 
-                        
-                        if(!empty($teacher_edit2)) {
-                            
-                            $_SESSION['success'] = "แก้ไขสำเร็จ!";
-                            echo "<script>window.location.href='?page=teacher_edit';</script>";
-                            exit;
-                            
-                        } else {
-                            whenerror();
-                            exit;
-                        }
+                    $student_prefix = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_prefix']));
+                    $teacher_fname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_fname']));
+                    $teacher_lname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_lname']));
+                    $teacher_email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_email']));
+                    $teacher_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_phone']));
                     
-                    }else{
+                    $check_email1 = $lms->select('teacher',"*","id='$id_teacher' AND email='$teacher_email'");
+                    
+                    if(!empty($check_email1)) {
                         
-                        $check_email2 = $lms->select('teacher',"email","email='$teacher_email'");
+                        $check_phone1 = $lms->select('teacher',"*","id='$id_teacher' AND phone='$teacher_phone'");
                         
-                        if(!empty($check_email2)) {
+                        if(!empty($check_phone1)) {
                         
-                            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว!";
-                            echo "<script>window.history.back();</script>";
-                            exit;
-                            
-                        }else{
-                            
                             $teacher_edit2 = $lms->update('teacher',['fname'=>$teacher_fname,'lname'=>$teacher_lname,'email'=>$teacher_email,'phone'=>$teacher_phone,'up_time'=>$date],"id='$id_teacher'"); 
                             
                             if(!empty($teacher_edit2)) {
@@ -102,9 +83,81 @@
                                 exit;
                                 
                             } else {
+                                
                                 whenerror();
                                 exit;
+                                
                             }
+                            
+                        }else{
+
+                            $check_phone2 = $lms->select('teacher',"*","phone='$teacher_phone'");
+                            
+                            if(empty($check_phone2)) {
+                                
+                                $teacher_edit2 = $lms->update('teacher',['fname'=>$teacher_fname,'lname'=>$teacher_lname,'email'=>$teacher_email,'phone'=>$teacher_phone,'up_time'=>$date],"id='$id_teacher'"); 
+                            
+                                if(!empty($teacher_edit2)) {
+                                    
+                                    $_SESSION['success'] = "แก้ไขสำเร็จ!";
+                                    echo "<script>window.location.href='?page=teacher_edit';</script>";
+                                    exit;
+                                    
+                                } else {
+                                    
+                                    whenerror();
+                                    exit;
+                                    
+                                }
+                                        
+                            }else{
+    
+                                $_SESSION['error'] = "เบอร์โทรศัพท์นี้มีในระบบแล้ว!";
+                                echo "<script>window.history.back();</script>";
+                                exit;
+                                
+                            }
+                            
+                        }
+
+                    }else{
+                        
+                        $check_email2 = $lms->select('teacher',"*","email='$teacher_email'");
+                        
+                        if(empty($check_email2)) {
+                        
+                            $check_phone2 = $lms->select('teacher',"*","phone='$teacher_phone'");
+                            
+                            if(empty($check_phone2)) {
+                                
+                                $teacher_edit2 = $lms->update('teacher',['fname'=>$teacher_fname,'lname'=>$teacher_lname,'email'=>$teacher_email,'phone'=>$teacher_phone,'up_time'=>$date],"id='$id_teacher'"); 
+                            
+                                if(!empty($teacher_edit2)) {
+                                    
+                                    $_SESSION['success'] = "แก้ไขสำเร็จ!";
+                                    echo "<script>window.location.href='?page=teacher_edit';</script>";
+                                    exit;
+                                    
+                                } else {
+                                    
+                                    whenerror();
+                                    exit;
+                                    
+                                }
+                                        
+                            }else{
+    
+                                $_SESSION['error'] = "เบอร์โทรศัพท์นี้มีในระบบแล้ว!";
+                                echo "<script>window.history.back();</script>";
+                                exit;
+                                
+                            }
+                            
+                        }else{
+                            
+                            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว!";
+                            echo "<script>window.history.back();</script>";
+                            exit;
                         } 
                     }
                     
@@ -116,13 +169,13 @@
                 
             case "teacher_edit3":
                 
-                $old_username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['old_username']));
-                $new_username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['new_username']));
-                $verify_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['verify_password']));
-                $en_verify = $lms->encode($verify_password);
-
                 if (!empty($_POST['old_username']) && !empty($_POST['new_username'])
                 && !empty($_POST['verify_password'])) {
+                    
+                    $old_username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['old_username']));
+                    $new_username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['new_username']));
+                    $verify_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['verify_password']));
+                    $en_verify = $lms->encode($verify_password);
                     
                     $check_new = $lms->select('teacher',"*","username='$new_username'");
                     
@@ -134,35 +187,25 @@
                         
                     }else{
                         
-                        $check_old = $lms->select('teacher',"*","id='$id_teacher' AND username='$old_username'");
+                        $check_verify = $lms->select('teacher',"*","id='$id_teacher' AND username='$old_username' AND password='$en_verify'");
                         
-                        if(!empty($check_old)){
+                        if(!empty($check_verify)){
                             
-                            $check_verify = $lms->select('teacher',"*","id='$id_teacher' AND password='$en_verify'");
-                            
-                            if(!empty($check_verify)){
+                            $teacher_edit3 = $lms->update('teacher',['username'=>$new_username,'up_time'=>$date],"id='$id_teacher'"); 
+                    
+                            if(!empty($teacher_edit3)) {
                                 
-                                $teacher_edit3 = $lms->update('teacher',['username'=>$new_username,'up_time'=>$date],"id='$id_teacher'"); 
-                        
-                                if(!empty($teacher_edit3)) {
-                                    
-                                    $_SESSION['success'] = "แก้ไขสำเร็จ!";
-                                    echo "<script>window.location.href='?page=teacher_edit';</script>";
-                                    exit;
-                                    
-                                } else {
-                                    whenerror();
-                                    exit;
-                                }
+                                $_SESSION['success'] = "แก้ไขสำเร็จ!";
+                                echo "<script>window.location.href='?page=teacher_edit';</script>";
+                                exit;
                                 
-                            }else{
-                                $_SESSION['error'] = "รหัสผ่านไม่ถูกต้อง!";
-                                echo "<script>window.history.back();</script>";
+                            } else {
+                                whenerror();
                                 exit;
                             }
                             
                         }else{
-                            $_SESSION['error'] = "ชื่อผู้ใช้เดิมไม่ถูกต้อง!";
+                            $_SESSION['error'] = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!";
                             echo "<script>window.history.back();</script>";
                             exit;
                         }
@@ -175,22 +218,23 @@
                 break;
                 
             case "teacher_edit4":
-                
-                $old_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['old_password']));
-                $new_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['new_password']));
-                $verify_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['verify_password']));
-                $en_old = $lms->encode($old_password);
-                $en_new = $lms->encode($new_password);
-                $en_verify = $lms->encode($verify_password);
 
-                if (!empty($_POST['old_password']) && !empty($_POST['new_password'])
-                && !empty($_POST['verify_password'])) {
+                if (!empty($_POST['username']) && !empty($_POST['old_password']) 
+                && !empty($_POST['new_password'])&& !empty($_POST['verify_password'])) {
+
+                    $username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['username']));
+                    $old_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['old_password']));
+                    $new_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['new_password']));
+                    $verify_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['verify_password']));
+                    $en_old = $lms->encode($old_password);
+                    $en_new = $lms->encode($new_password);
+                    $en_verify = $lms->encode($verify_password);
                     
                     if($en_new == $en_verify) {
                         
-                        $check_old = $lms->select('teacher',"*","id='$id_teacher' AND password='$en_old'");
+                        $check_up = $lms->select('teacher',"*","id='$id_teacher'AND username='$username' AND password='$en_old'");
                         
-                        if(!empty($check_old)){
+                        if(!empty($check_up)){
 
                             $teacher_edit4 = $lms->update('teacher',['password'=>$en_new,'up_time'=>$date],"id='$id_teacher'"); 
                         
@@ -207,7 +251,7 @@
                         }
                         
                     }else{
-                        $_SESSION['error'] = "รหัสผ่านเดิมไม่ถูกต้อง!";
+                        $_SESSION['error'] = "ชื่อผู้ใช้หรือรหัสผ่านเดิมไม่ถูกต้อง!";
                         echo "<script>window.history.back();</script>";
                         exit;
                     } 
@@ -219,12 +263,43 @@
                 break;
 
             case "teacher_delete" :
+
+                if (!empty($_POST['del_username']) && !empty($_POST['del_password'])) {
+
+                    $del_username = mysqli_real_escape_string($lms->dbConnect, trim($_POST['del_username']));
+                    $del_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['del_password']));
+                    $en_pwd = $lms->encode($del_password);
+
+                    $check_del = $lms->select('teacher',"*","id='$id_teacher'AND username='$del_username' AND password='$en_pwd'");
+                    
+                    if(!empty($check_del)) {
+                                
+                        $del_account = $lms->delete('teacher',"id='$id_teacher'");
+                        
+                        if(!empty($del_account)) {
+                                
+                            $_SESSION['success'] = "ลบบัญชีสำเร็จ!";
+                            echo "<script>window.location.href='auth/login.php';</script>";
+                            exit;
+                            
+                        } else {
+                            whenerror();
+                            exit;
+                        }   
+                        
+                    } else {
+                        
+                        $_SESSION['error'] = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!";
+                        echo "<script>window.history.back();</script>";
+                        exit;
+                    } 
+                }
                 
                 break;
+                
             default:
             whenerror();
         }
-        
     }
     
 ?>
@@ -247,17 +322,18 @@
         <div class="row gutters-sm justify-content-center">
             <div class="col-md-4 mb-3">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-column align-items-center text-center">
+                    <div class="card-body pb-4">
+                        <div class="d-flex flex-column align-items-center text-center pt-4">
                             <img src="<?php if($teacher[0]['profile']==''){echo 'image/profile/cat.png';}
                             else{echo 'upload/img_teacher/'.$teacher[0]['profile'];}?>" class="img-thumbnail"
                                 width="225">
-                            <div class="mt-3">
-                                <h4>
+                            <div class="mt-3 pb-4">
+                                <h4 class="pb-3"
+                                    style="width:280px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                                     <?php echo $teacher[0]['fname'].' '.$teacher[0]['lname']; ?>
                                 </h4>
-                                <button class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#profileModal">แก้ไขรูปโปรไฟล์</button>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#profileModal"><i
+                                        class="fa-solid fa-pen-to-square"></i>&nbsp;แก้ไขรูปโปรไฟล์</button>
                             </div>
                         </div>
                     </div>
@@ -267,7 +343,7 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="col-sm-12">
-                            <nav>
+                            <nav class="nav">
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                     <button class="nav-link active" id="nav-show-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-show" type="button" role="tab" aria-controls="nav-show"
@@ -289,7 +365,309 @@
                             </nav>
                         </div>
                         <br>
-                        <?php include('inc/account.php'); ?>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-show" role="tabpanel"
+                                aria-labelledby="nav-show-tab">
+                                <div class="ps-3">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">คำนำหน้า</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <?= $teacher[0]['prefix'] ?>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">ชื่อ</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <?= $teacher[0]['fname'] ?>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">นามสกุล</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <?= $teacher[0]['lname'] ?>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">อีเมล์</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <?= $teacher[0]['email'] ?>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h6 class="mb-0">เบอร์โทร</h6>
+                                        </div>
+                                        <div class="col-sm-9 text-secondary">
+                                            <?= $teacher[0]['phone'] ?>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#profiledelModal"><i
+                                                class="fa-solid fa-trash-can"></i>&nbsp;ลบบัญชีนี้</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ************************************************************************************* -->
+
+                            <div class="tab-pane fade" id="nav-edit" role="tabpanel" aria-labelledby="nav-edit-tab">
+                                <div class="ps-3">
+                                    <form action="?page=teacher_edit" method="post">
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">คำนำหน้า</label>
+                                            <div class="col-sm-9">
+                                                <div class="col-3">
+                                                    <select class="form-select " id="teacher_prefix"
+                                                        name="teacher_prefix">
+                                                        <option value="">--คำนำหน้า--</option>
+                                                        <option value="นาย" <?php if($teacher[0]['prefix']=="นาย"): ?>
+                                                            selected="selected" <?php endif; ?>>นาย
+                                                        </option>
+                                                        <option value="นาง" <?php if($teacher[0]['prefix']=="นาง"): ?>
+                                                            selected="selected" <?php endif; ?>>นาง
+                                                        </option>
+                                                        <option value="นางสาว"
+                                                            <?php if($teacher[0]['prefix']=="นางสาว"): ?>
+                                                            selected="selected" <?php endif; ?>>นางสาว
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">ชื่อ
+                                                <span class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="teacher_fname"
+                                                    name="teacher_fname" placeholder="ชื่อ" required
+                                                    value="<?= $teacher[0]['fname'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">นามสกุล
+                                                <span class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="teacher_lname"
+                                                    name="teacher_lname" placeholder="นามสกุล" required
+                                                    value="<?= $teacher[0]['lname'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">อีเมล์</label>
+                                            <div class="col-sm-8">
+                                                <input type="email" class="form-control" id="teacher_email"
+                                                    name="teacher_email" placeholder="อีเมล์"
+                                                    value="<?= $teacher[0]['email'] ?>">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">เบอร์โทรศัพท์</label>
+                                            <div class="col-sm-8">
+                                                <input type="phone" class="form-control" id="teacher_phone"
+                                                    name="teacher_phone" placeholder="เบอร์โทรศัพท์"
+                                                    value="<?= $teacher[0]['phone'] ?>">
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary" name="action"
+                                                value="teacher_edit2">บันทึกการแก้ไข
+                                                <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- *************************************************************************************-->
+
+                            <div class="tab-pane fade" id="nav-user" role="tabpanel" aria-labelledby="nav-user-tab">
+                                <div class="ps-3">
+                                    <form action="?page=teacher_edit" method="post">
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">ชื่อผู้ใช้เดิม
+                                                <span class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="old_username"
+                                                    name="old_username" placeholder="ชื่อผู้ใช้เดิม" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">ชื่อผู้ใช้ใหม่
+                                                <span class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="new_username"
+                                                    name="new_username" placeholder="ชื่อผู้ใช้ใหม่" required
+                                                    minlength="6">
+                                            </div>
+                                        </div>
+                                        <div class=" row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">รหัสผ่าน<span
+                                                    class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="verify_password"
+                                                    name="verify_password" placeholder="รหัสผ่าน" required>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary" name="action"
+                                                value="teacher_edit3">บันทึกการแก้ไข
+                                                <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- *************************************************************************************-->
+
+                            <div class="tab-pane fade" id="nav-password" role="tabpanel"
+                                aria-labelledby="nav-password-tab">
+                                <div class="ps-3">
+                                    <form action="?page=teacher_edit" method="post">
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">ชื่อผู้ใช้
+                                                <span class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="username" name="username"
+                                                    placeholder="ชื่อผู้ใช้" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">รหัสผ่านเดิม
+                                                <span class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="old_password"
+                                                    name="old_password" placeholder="รหัสผ่านเดิม" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">รหัสผ่านใหม่
+                                                <span class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="new_password"
+                                                    name="new_password" placeholder="รหัสผ่านใหม่" required
+                                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                                    title="a-Z ต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็กและตัวเลข(อย่างน้อย 8 ตัวอักษร)">
+                                            </div>
+                                        </div>
+                                        <div class=" row mb-3 d-flex justify-content-start">
+                                            <label for="input" class="col-sm-2 col-form-label">ยืนยันรหัสผ่านใหม่<span
+                                                    class="text-danger">*</span></label>
+                                            <div class="col-sm-8">
+                                                <input type="password" class="form-control" id="verify_password"
+                                                    name="verify_password" placeholder="ยืนยันรหัสผ่านใหม่" required
+                                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                                    title="a-Z ต้องมีตัวพิมพ์ใหญ่ ตัวพิมพ์เล็กและตัวเลข(อย่างน้อย 8 ตัวอักษร)">
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary" name="action"
+                                                value="teacher_edit4">บันทึกการแก้ไข
+                                                <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************
+    ************************************************************************************* -->
+
+                        <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="profileModalModalLabel">แก้ไขรูปภาพส่วนตัว</h5>
+                                    </div>
+                                    <form method="post" action="?page=teacher_edit" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            <div class="px-4 text-center">
+                                                <input class="form-control" id="teacher_profile" name="teacher_profile"
+                                                    type="file" accept="image/*" onchange="readURL(this);">
+                                                <br>
+                                                <img id='preview' class="pb-3"
+                                                    style="display:none; width: 250px; height: 250px; object-fit: cover;">
+                                                <div id="stored_picture" class="pb-3">
+                                                    <?php if ($teacher[0]['profile']!='') { ?>
+
+                                                    <img src="upload/img_teacher/<?= $teacher[0]['profile'] ?>"
+                                                        style="width: 250px; height: 250px; object-fit: cover;">
+
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary" name="action"
+                                                    value="teacher_edit1">บันทึกการแก้ไข
+                                                    <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                                                <button type="button" class="btn btn-warning"
+                                                    data-bs-dismiss="modal">ยกเลิก</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- *************************************************************************************
+    ************************************************************************************* -->
+
+                        <div class="modal fade" id="profiledelModal" tabindex="-1"
+                            aria-labelledby="profiledelModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="profiledelModalModalLabel">ลบบัญชี้ผู้ใช้</h5>
+                                    </div>
+                                    <form method="post" action="?page=teacher_edit" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            <div class="px-4 text-center">
+                                                <div class="row mb-3 d-flex justify-content-start">
+                                                    <label for="input" class="col-sm-4 col-form-label">ชื่อผู้ใช้
+                                                        <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="del_username"
+                                                            name="del_username" placeholder="ชื่อผู้ใช้" required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3 d-flex justify-content-start">
+                                                    <label for="input" class="col-sm-4 col-form-label">รหัสผ่าน
+                                                        <span class="text-danger">*</span></label>
+                                                    <div class="col-sm-8">
+                                                        <input type="password" class="form-control" id="del_password"
+                                                            name="del_password" placeholder="รหัสผ่านเดิม" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger" name="action"
+                                                    value="teacher_delete">
+                                                    <i class="fa-solid fa-trash-can"></i>&nbsp;ลบบัญชี้ผู้ใช้
+                                                </button>
+                                                <button type="button" class="btn btn-success"
+                                                    data-bs-dismiss="modal">ยกเลิก</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

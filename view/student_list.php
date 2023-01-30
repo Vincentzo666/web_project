@@ -27,7 +27,7 @@
                                     </tr>
                                 </thead>
                                 <?php 
-                                    $student_page = $lms->select('student','*');
+                                    $student_page = $lms->select('student ORDER BY fname ASC','*');
                                     foreach($student_page as $student_list){ 
                                     ?>
                                 <tr>

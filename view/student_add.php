@@ -1,15 +1,15 @@
 <?php 
     if(isset($_POST["action"]) && $_POST["action"]=='student_add'){
         
-        $student_id = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_id'])); 
-        $student_prefix = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_prefix']));
-        $student_fname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_fname']));
-        $student_lname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_lname']));
-        $student_email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_email']));
-        $student_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_phone']));
-
         if (!empty($_POST['student_id']) && !empty($_POST['student_fname'])
         && !empty($_POST['student_lname'])) {
+
+            $student_id = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_id'])); 
+            $student_prefix = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_prefix']));
+            $student_fname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_fname']));
+            $student_lname = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_lname']));
+            $student_email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_email']));
+            $student_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_phone']));
 
             $check_student = $lms->select('student',"*","std_id='$student_id'");
             

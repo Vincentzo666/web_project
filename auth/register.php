@@ -33,16 +33,19 @@
                     exit;
                     
                 } else {
+                    
                     whenerror();
                     exit;
+                    
                 }
             }      
             
         }else{
+            
             whenerror();
             exit;
-        }
-        
+            
+        } 
     }
 ?>
 <style>
@@ -78,11 +81,6 @@
                                     <input type="text" class="form-control" name="register_lname" id="register_lname"
                                         placeholder="Last name" required>
                                     <label for="floatingInput">Last name</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="email" class="form-control" name="register_email" id="register_email"
-                                        placeholder="Email address" required>
-                                    <label for="floatingInput">Email address</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" name="register_username"

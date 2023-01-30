@@ -1,6 +1,7 @@
 <?php 
 include("../inc/header.php");
 include("../php/function.php");
+
 if(isset($_POST["action"]) && $_POST["action"]=='login'){
     // echo "<script>console.log('1111')</script>";
     if (!empty($_POST['login_username']) && !empty($_POST['login_password'])) {
@@ -11,6 +12,7 @@ if(isset($_POST["action"]) && $_POST["action"]=='login'){
         $en_password = $lms->encode($password);
         
         $login = $lms->select('teacher',"*","username='$username' AND password='$en_password'"); 
+        
         if(!empty($login)) {
             // echo "<script>console.log('yess')</script>";
             $_SESSION['success'] = "เข้าสู่ระบบสำเร็จ!";
@@ -21,12 +23,16 @@ if(isset($_POST["action"]) && $_POST["action"]=='login'){
             
         } else {
             // echo "<script>console.log('noo')</script>";
-            $_SESSION['error'] = "อีเมลล์หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง!";
+            $_SESSION['error'] = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง!";
             echo "<script>window.history.back();</script>";
             exit;
         }
+    }else{
+        
+        $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
+        echo "<script>window.history.back();</script>";
+        exit;
     }
-    exit;
 }
 session_unset();
 session_destroy();

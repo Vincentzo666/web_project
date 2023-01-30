@@ -1,5 +1,6 @@
 <?php 
     if(isset($_POST["action"]) && $_POST["action"]=='subject_add'){
+        
         if (!empty($_POST['subject_id']) && !empty($_POST['subject_name'])) {
             
             $subject_id = mysqli_real_escape_string($lms->dbConnect, trim($_POST['subject_id']));
@@ -8,6 +9,7 @@
             
 
             $check_subject = $lms->select('subject',"*","sub_id='$subject_id'");
+            
             if(!empty($check_subject)) {
                 
                 $_SESSION['error'] = "รหัสวิชานี้มีในระบบแล้ว!";
@@ -26,9 +28,11 @@
                     $allowTypes = array('jpg', 'png', 'jpeg');
 
                     if (in_array($fileType, $allowTypes)) {
+                        
                         if (move_uploaded_file($_FILES["subject_img"]["tmp_name"], $targetFilePath)) {
                             
                             $subject_add = $lms->insert('subject',['sub_id'=>$subject_id,'id_teacher'=>$id_teacher,'name'=>$subject_name,'detail'=>$subject_detail,'image'=>$fileName,'cr_time'=>$date]);
+                            
                             if(!empty($subject_add)) {
                                 // echo "<script>console.log('{$fileName}')</script>";
                                 $_SESSION['success'] = "เพิ่มรายวิชาสำเร็จ!";
@@ -62,6 +66,7 @@
                 } else {
                     
                     $subject_add = $lms->insert('subject',['sub_id'=>$subject_id,'id_teacher'=>$id_teacher,'name'=>$subject_name,'detail'=>$subject_detail,'cr_time'=>$date]);
+                    
                     if(!empty($subject_add)) {
                                 
                         $_SESSION['success'] = "เพิ่มรายวิชาสำเร็จ!";
@@ -75,7 +80,11 @@
                     }
                 }
             }
-        }else{exit;}
+        }else{
+            
+            whenerror();
+            exit;
+        }
     }
 ?>
 <div class="py-5 pt-3" style="background-color:#f0f8ff;">
