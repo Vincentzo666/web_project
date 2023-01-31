@@ -1,17 +1,39 @@
 <?php 
 $_SESSION['sx']='name ASC';
+$sqlx = '';
+
 if(isset($_POST['search'])){
     $input_search = $_POST['search'];
     $_SESSION['keyword_subject'] = $input_search;
     $_SESSION['subject_sx'] = " AND name LIKE '%$input_search%'";
     
 }
+
 if(!isset($_SESSION['keyword_subject'])){
     $_SESSION['keyword_subject']='';
 }
-$sqlx = '';
+
 if(isset($_SESSION['subject_sx'])){
     $sqlx = $_SESSION['subject_sx'];
+}
+
+if(isset($_GET['delete_subject'])){
+    
+    $id = $_GET['delete_subject'];
+    $del_std = $lms->delete('subject',"id='$id'");
+
+    if(!empty($del_std)) {
+                                
+        $_SESSION['success'] = "ลบรายวิชานี้สำเร็จ!";
+        echo "<script>window.history.back();</script>";
+        exit;
+        
+    } else {
+        
+        whenerror();
+        exit;
+        
+    }   
 }
 ?>
 <div class="album py-5 " style="background-color:#f0f8ff;">
@@ -88,11 +110,15 @@ if(isset($_SESSION['subject_sx'])){
                                 echo '<p style="height:72px;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;overflow: hidden;">
                                 '.$subject_list['detail'].'</p>';
                             }?>
-                            <div class=" d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-success">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    <a type="button" class="btn btn-sm btn-outline-success px-2 "
+                                        href="?page=subject_view&id=<?= $subject_list['id'] ?>">view</a>
+                                    <a type="button" class="btn btn-sm btn-outline-secondary px-2 "
+                                        href="?page=subject_edit&id=<?= $subject_list['id'] ?>">edit</a>
+                                    <a type="button" class="btn btn-sm btn-outline-danger px-2 delete_subject"
+                                        id="<?= $subject_list['id'] ?>"
+                                        data-name-sub="<?= $subject_list['name'] ?>">delete</a>
                                 </div>
                             </div>
                         </div>
@@ -106,3 +132,26 @@ if(isset($_SESSION['subject_sx'])){
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+
+    $(document).on('click', '.delete_subject', function() {
+        var id = $(this).attr("id");
+        var name_sub = $(this).attr("data-name-sub");
+        swal.fire({
+            title: 'ต้องการลบรายวิชานี้ !',
+            text: "ชื่อวิชา : " + name_sub,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'yes!',
+            cancelButtonText: 'no'
+        }).then((result) => {
+            if (result.value) {
+                window.location.href = "?page=subject_list&delete_subject=" + id;
+            }
+        });
+    });
+});
+</script>

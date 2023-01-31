@@ -66,13 +66,13 @@
                     $teacher_email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_email']));
                     $teacher_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_phone']));
                     
-                    $check_email1 = $lms->select('teacher',"*","id='$id_teacher' AND email='$teacher_email'");
+                    $check_email = $lms->select('teacher',"*","id !='$id_teacher' AND email='$teacher_email'");
                     
-                    if(!empty($check_email1)) {
+                    if(empty($check_email)) {
                         
-                        $check_phone1 = $lms->select('teacher',"*","id='$id_teacher' AND phone='$teacher_phone'");
+                        $check_phone = $lms->select('teacher',"*","id !='$id_teacher' AND phone='$teacher_phone'");
                         
-                        if(!empty($check_phone1)) {
+                        if(!empty($check_phone)) {
                         
                             $teacher_edit2 = $lms->update('teacher',['fname'=>$teacher_fname,'lname'=>$teacher_lname,'email'=>$teacher_email,'phone'=>$teacher_phone,'up_time'=>$date],"id='$id_teacher'"); 
                             
@@ -91,74 +91,18 @@
                             
                         }else{
 
-                            $check_phone2 = $lms->select('teacher',"*","phone='$teacher_phone'");
-                            
-                            if(empty($check_phone2)) {
-                                
-                                $teacher_edit2 = $lms->update('teacher',['fname'=>$teacher_fname,'lname'=>$teacher_lname,'email'=>$teacher_email,'phone'=>$teacher_phone,'up_time'=>$date],"id='$id_teacher'"); 
-                            
-                                if(!empty($teacher_edit2)) {
-                                    
-                                    $_SESSION['success'] = "แก้ไขสำเร็จ!";
-                                    echo "<script>window.location.href='?page=teacher_edit';</script>";
-                                    exit;
-                                    
-                                } else {
-                                    
-                                    whenerror();
-                                    exit;
-                                    
-                                }
-                                        
-                            }else{
-    
-                                $_SESSION['error'] = "เบอร์โทรศัพท์นี้มีในระบบแล้ว!";
-                                echo "<script>window.history.back();</script>";
-                                exit;
-                                
-                            }
-                            
-                        }
-
-                    }else{
-                        
-                        $check_email2 = $lms->select('teacher',"*","email='$teacher_email'");
-                        
-                        if(empty($check_email2)) {
-                        
-                            $check_phone2 = $lms->select('teacher',"*","phone='$teacher_phone'");
-                            
-                            if(empty($check_phone2)) {
-                                
-                                $teacher_edit2 = $lms->update('teacher',['fname'=>$teacher_fname,'lname'=>$teacher_lname,'email'=>$teacher_email,'phone'=>$teacher_phone,'up_time'=>$date],"id='$id_teacher'"); 
-                            
-                                if(!empty($teacher_edit2)) {
-                                    
-                                    $_SESSION['success'] = "แก้ไขสำเร็จ!";
-                                    echo "<script>window.location.href='?page=teacher_edit';</script>";
-                                    exit;
-                                    
-                                } else {
-                                    
-                                    whenerror();
-                                    exit;
-                                    
-                                }
-                                        
-                            }else{
-    
-                                $_SESSION['error'] = "เบอร์โทรศัพท์นี้มีในระบบแล้ว!";
-                                echo "<script>window.history.back();</script>";
-                                exit;
-                                
-                            }
-                            
-                        }else{
-                            
-                            $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว!";
+                            $_SESSION['error'] = "เบอร์โทรศัพท์นี้มีในระบบแล้ว!";
                             echo "<script>window.history.back();</script>";
                             exit;
-                        } 
+                                
+                        }
+                            
+                    }else{
+                        
+                        $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว!";
+                        echo "<script>window.history.back();</script>";
+                        exit;
+                        
                     }
                     
                 }else {
@@ -177,15 +121,9 @@
                     $verify_password = mysqli_real_escape_string($lms->dbConnect, trim($_POST['verify_password']));
                     $en_verify = $lms->encode($verify_password);
                     
-                    $check_new = $lms->select('teacher',"*","username='$new_username'");
+                    $check_new = $lms->select('teacher',"*","id !='$id_teacher' AND username='$new_username'");
                     
-                    if(!empty($check_new)) {
-                        
-                        $_SESSION['error'] = "ชื่อผู้ใช้นี้มีในระบบแล้ว!";
-                        echo "<script>window.history.back();</script>";
-                        exit;
-                        
-                    }else{
+                    if(empty($check_new)) {
                         
                         $check_verify = $lms->select('teacher',"*","id='$id_teacher' AND username='$old_username' AND password='$en_verify'");
                         
@@ -205,10 +143,18 @@
                             }
                             
                         }else{
+                            
                             $_SESSION['error'] = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!";
                             echo "<script>window.history.back();</script>";
                             exit;
                         }
+                        
+                        
+                    }else{
+                        
+                        $_SESSION['error'] = "ชื่อผู้ใช้นี้มีในระบบแล้ว!";
+                        echo "<script>window.history.back();</script>";
+                        exit;
                     } 
                     
                 }else {
@@ -245,15 +191,19 @@
                                 exit;
                                 
                             } else {
+                                
                                 whenerror();
                                 exit;
+                                
                             }                   
                         }
                         
                     }else{
+                        
                         $_SESSION['error'] = "ชื่อผู้ใช้หรือรหัสผ่านเดิมไม่ถูกต้อง!";
                         echo "<script>window.history.back();</script>";
                         exit;
+                        
                     } 
                     
                 }else {
@@ -691,6 +641,7 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     } else {
         $('#preview').hide();
+        $('#stored_picture').show();
     }
 }
 </script>

@@ -75,14 +75,14 @@ if(isset($_GET['delete_student'])){
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item"
-                                                        href="?page=student_view&id=<?= $student_list['id'] ?>">รายละเอียด</a>
+                                                        href="?page=student_view&id=<?= $student_list['id'] ?>">view</a>
                                                 </li>
                                                 <li><a class="dropdown-item"
-                                                        href="?page=student_edit&id=<?= $student_list['id'] ?>">แก้ไข</a>
+                                                        href="?page=student_edit&id=<?= $student_list['id'] ?>">edit</a>
                                                 </li>
                                                 <li><a class="dropdown-item delete_student"
                                                         id="<?= $student_list['id'] ?>"
-                                                        data-name-std="<?= $student_list['fname'].' '.$student_list['lname'] ?>">ลบ</a>
+                                                        data-name-std="<?= $student_list['fname'].' '.$student_list['lname'] ?>">delete</a>
                                                 </li>
                                             </ul>
                                         </div>

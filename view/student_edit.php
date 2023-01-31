@@ -1,12 +1,12 @@
 <?php 
 
-if(isset($_GET['id'])){
+    if(isset($_GET['id'])){
 
-    $id = $_GET['id'];
-    
-    $student = $lms->select('student',"*","id='$id'");
-    
-}
+        $id = $_GET['id'];
+        
+        $student = $lms->select('student',"*","id='$id'");
+        
+    }
    
     
     if(isset($_POST["action"]) && $_POST["action"]=='student_edit'){
@@ -22,83 +22,93 @@ if(isset($_GET['id'])){
             $student_email = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_email']));
             $student_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['student_phone']));
 
-            $check_student = $lms->select('student',"*","id='$id' AND std_id='$student_id'");
+            $check_studentid = $lms->select('student',"*","id !='$id' AND std_id='$student_id'");
             
-            if(!empty($check_student)) {
+            if(empty($check_studentid)) {
                 
-                $check_email1 = $lms->select('student',"*","id='$id' AND email='$student_email'");
+                $check_email = $lms->select('student',"*","id !='$id' AND email='$student_email'");
                     
-                    if(!empty($check_email1)) {
+                if(empty($check_email)) {
+                    
+                    $check_phone = $lms->select('student',"*","id !='$id' AND phone='$student_phone'");
+                    
+                    if(empty($check_phone)) {
                         
-                        $check_phone1 = $lms->select('student',"*","id='$id' AND phone='$student_phone'");
-                        
-                        if(!empty($check_phone1)) {
+                        if (!empty($_FILES["student_img"]["name"])) {
                             
-                            if (!empty($_FILES["student_img"]["name"])) {
-                                
-                                
-                                
-                            }else{
-                                
+                            $targetDir = "upload/img_student/";
+                            $temp = explode(".", $_FILES["student_img"]["name"]);
+                            $fileName = 'student-'.$namedate. '.' . end($temp);
+                            $targetFilePath = $targetDir . $fileName;
+                            $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+                            $allowTypes = array('jpg', 'png', 'jpeg');
 
+                            if (in_array($fileType, $allowTypes)) {
                                 
-                            }
-                            
-                        }
-                    }
-                
-            }else{
-            
-                if (!empty($_FILES["student_img"]["name"])) {
-
-                    $targetDir = "upload/img_student/";
-                    $temp = explode(".", $_FILES["student_img"]["name"]);
-                    $fileName = 'student-'.$namedate. '.' . end($temp);
-                    $targetFilePath = $targetDir . $fileName;
-                    $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
-                    $allowTypes = array('jpg', 'png', 'jpeg');
-
-                    if (in_array($fileType, $allowTypes)) {
-                        
-                        if (move_uploaded_file($_FILES["student_img"]["tmp_name"], $targetFilePath)) {
-                            
-                            $student_add = $lms->insert('student',['std_id'=>$student_id,'prefix'=>$student_prefix,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'std_pic'=>$fileName,'cr_time'=>$date]);
-                            
-                            if(!empty($student_add)) {
-                                
-                                $_SESSION['success'] = "เพิ่มรายชื่อผู้เรียนสำเร็จ!";
-                                echo "<script>window.location.href='?page=student_list';</script>";
-                                exit;
+                                if (move_uploaded_file($_FILES["student_img"]["tmp_name"], $targetFilePath)) {
+                                    
+                                    $student_add = $lms->update('student',['std_id'=>$student_id,'prefix'=>$student_prefix,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'std_pic'=>$fileName,'up_time'=>$date],"id='$id'");
+                                    
+                                    if(!empty($student_add)) {
+                                        
+                                        $_SESSION['success'] = "เพิ่มรายชื่อผู้เรียนสำเร็จ!";
+                                        echo "<script>window.location.href='?page=student_list';</script>";
+                                        exit;
+                                        
+                                    }else {
+                                        $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
+                                        unlink("upload/img_student/$fileName");
+                                        echo "<script>window.history.back();</script>";
+                                        exit;
+                                    }
+                                    
+                                }else {
+                                    $_SESSION['error'] = "เกิดข้อผิดพลาด! อัพโหลดไฟล์ไม่สำเร็จ!";
+                                    echo "<script> window.history.back()</script>";
+                                    exit;   
+                                } 
                                 
                             }else {
-                                $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
-                                unlink("upload/img_student/$fileName");
-                                echo "<script>window.history.back();</script>";
+                                $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่รองรับนามสกุลไฟล์ชนิดนี้!";
+                                echo "<script> window.history.back()</script>";
                                 exit;
                             }
+                                        
+                        }else{
                             
-                        }else {
-                            $_SESSION['error'] = "เกิดข้อผิดพลาด! อัพโหลดไฟล์ไม่สำเร็จ!";
+                            $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบไฟล์ที่เลือก!";
                             echo "<script> window.history.back()</script>";
-                            exit;   
-                        } 
+                            exit;
+                            
+                        }
                         
-                    }else {
-                        $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่รองรับนามสกุลไฟล์ชนิดนี้!";
+                    }else{
+
+                        $_SESSION['error'] = "เบอร์โทรศัพท์นี้มีในระบบแล้ว!";
                         echo "<script> window.history.back()</script>";
                         exit;
+
                     }
-                    
                 }else{
-                    $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบไฟล์ที่เลือก!";
+
+                    $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว!";
                     echo "<script> window.history.back()</script>";
                     exit;
+
                 }
-            }  
+            }else{
+
+                $_SESSION['error'] = "รหัสนักศึกษานี้มีในระบบแล้ว!";
+                echo "<script> window.history.back()</script>";
+                exit;
+
+            }
              
         }else{
+            
             whenerror();
             exit;
+            
         }
         
     }
@@ -187,7 +197,7 @@ if(isset($_GET['id'])){
                                 class="text-danger">*</span></label>
                         <div class="col-sm-8">
                             <input type="file" class="form-control" id="student_img" name="student_img"
-                                onchange="readURL(this);" required>
+                                onchange="readURL(this);">
                             <br>
                             <img id='preview' style="display:none; width: 250px; height: 250px; object-fit: cover;">
                             <div id="stored_picture" class="pb-3">
@@ -232,6 +242,7 @@ function readURL(input) {
         reader.readAsDataURL(input.files[0]);
     } else {
         $('#preview').hide();
+        $('#stored_picture').show();
     }
 
 }
