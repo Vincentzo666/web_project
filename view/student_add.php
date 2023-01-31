@@ -98,9 +98,17 @@
             <div class="py-3 p-md-5 bg-light rounded-5 shadow-lg col-md-8">
                 <form action="?page=student_add" method="post" class="px-0 pt-3" enctype="multipart/form-data">
                     <div class="row mb-3 d-flex justify-content-center">
-                        <label for="input" class="col-sm-2 col-form-label">เพศ</label>
+                        <label for="input" class="col-sm-2 col-form-label">รหัสผู้เรียน
+                            <span class="text-danger">*</span></label>
                         <div class="col-sm-8">
-                            <div class="col-3">
+                            <input type="text" class="form-control" id="student_id" name="student_id"
+                                placeholder="รหัสผู้เรียน" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3 d-flex justify-content-center">
+                        <label for="input" class="col-sm-2 col-form-label">คำนำหน้าชื่อ</label>
+                        <div class="col-sm-8">
+                            <div class="col-4">
                                 <select class="form-select " id="student_prefix" name="student_prefix">
                                     <option value="">--คำนำหน้า--</option>
                                     <option value="นาย">นาย</option>
@@ -124,14 +132,6 @@
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="student_lname" name="student_lname"
                                 placeholder="นามสกุล" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3 d-flex justify-content-center">
-                        <label for="input" class="col-sm-2 col-form-label">รหัสผู้เรียน
-                            <span class="text-danger">*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="student_id" name="student_id"
-                                placeholder="รหัสผู้เรียน" required>
                         </div>
                     </div>
                     <div class="row mb-3 d-flex justify-content-center">

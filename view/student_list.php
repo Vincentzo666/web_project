@@ -1,3 +1,21 @@
+<?php
+if(isset($_GET['delete_student'])){
+    
+    $id = $_GET['delete_student'];
+    $del_std = $lms->delete('student',"id='$id'");
+
+    if(!empty($del_std)) {
+                                
+        $_SESSION['success'] = "ลบรายชื่อนี้สำเร็จ!";
+        echo "<script>window.history.back();</script>";
+        exit;
+        
+    } else {
+        whenerror();
+        exit;
+    }   
+}
+?>
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
         <div class="text-center text-md-start">
@@ -56,11 +74,16 @@
                                                 data-bs-toggle="dropdown" aria-expanded="false"><b>เลือก</b>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" target="_blank">รายละเอียด</a>
+                                                <li><a class="dropdown-item"
+                                                        href="?page=student_view&id=<?= $student_list['id'] ?>">รายละเอียด</a>
                                                 </li>
-                                                <li><a class="dropdown-item">แก้ไข</a>
+                                                <li><a class="dropdown-item"
+                                                        href="?page=student_edit&id=<?= $student_list['id'] ?>">แก้ไข</a>
                                                 </li>
-                                                <li><a class="dropdown-item deletequoin">ลบ</a></li>
+                                                <li><a class="dropdown-item delete_student"
+                                                        id="<?= $student_list['id'] ?>"
+                                                        data-name-std="<?= $student_list['fname'].' '.$student_list['lname'] ?>">ลบ</a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </td>
@@ -77,5 +100,24 @@
 <script>
 $(document).ready(function() {
     $(' #example').DataTable();
+
+    $(document).on('click', '.delete_student', function() {
+        var id = $(this).attr("id");
+        var name_std = $(this).attr("data-name-std");
+        swal.fire({
+            title: 'ต้องการลบรายชื่อนี้ !',
+            text: "ชื่อนักศึกษา : " + name_std,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'yes!',
+            cancelButtonText: 'no'
+        }).then((result) => {
+            if (result.value) {
+                window.location.href = "?page=student_list&delete_student=" + id;
+            }
+        });
+    });
 });
 </script>
