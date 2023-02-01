@@ -434,9 +434,6 @@
                                         </div>
                                         <hr>
                                         <div class="col-md-3">
-                                            <button type="reset" class="btn btn-warning me-3"><i
-                                                    class="fa-solid fa-arrow-rotate-left"></i>
-                                                ล้างข้อมูล</button>
                                             <button type="submit" class="btn btn-primary" name="action"
                                                 value="teacher_edit2">บันทึกการแก้ไข
                                                 <i class="fa-solid fa-cloud-arrow-up"></i></button>

@@ -1,4 +1,11 @@
-<?php 
+<?php
+
+    if(isset($_GET['subid'])){
+        
+        $_SESSION['subid']=$_GET['subid'];
+        
+    }
+    
     if(isset($_POST["action"]) && $_POST["action"]=='student_add'){
         
         if (!empty($_POST['student_id']) && !empty($_POST['student_fname'])
@@ -38,9 +45,19 @@
                             
                             if(!empty($student_add)) {
                                 
-                                $_SESSION['success'] = "เพิ่มรายชื่อผู้เรียนสำเร็จ!";
-                                echo "<script>window.location.href='?page=student_list';</script>";
-                                exit;
+                                if(isset($_SESSION['subid'])){
+                                    
+                                    $_SESSION['success'] = "เพิ่มรายชื่อนักศึกษาสำเร็จ!";
+                                    echo "<script>window.location.href='?page=subject_select_std&subid=".$_SESSION['subid']."';</script>";
+                                    exit;
+                                    
+                                }else{
+                                    
+                                    $_SESSION['success'] = "เพิ่มรายชื่อนักศึกษาสำเร็จ!";
+                                    echo "<script>window.location.href='?page=student_list';</script>";
+                                    exit;
+                                    
+                                }
                                 
                             }else {
                                 $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
@@ -80,7 +97,15 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php">หน้าหลัก</a></li>
-                <li class="breadcrumb-item"><a href="?page=student_list">รายชื่อชื่อผู้เรียน</a></li>
+                <?php if(isset($_SESSION['subid'])){ ?>
+                <li class="breadcrumb-item"><a
+                        href="?page=subject_view&subid=<?= $_SESSION['subid'] ?>">รายละเอียดวิชา</a></li>
+                <li class="breadcrumb-item"><a
+                        href="?page=subject_select_std&subid=<?= $_SESSION['subid'] ?>">เพิ่มรายชื่อเข้าชั้นเรียน</a>
+                </li>
+                <?php }else{ ?>
+                <li class="breadcrumb-item"><a href="?page=student_list">รายชื่อผู้เรียน</a></li>
+                <?php } ?>
                 <li class="breadcrumb-item active" aria-current="page">เพิ่มรายชื่อผู้เรียน</li>
             </ol>
         </nav>
@@ -89,11 +114,11 @@
                 <h2>เพิ่มรายชื่อผู้เรียน</h2>
             </div>
             <div class="col-sm-5 text-end">
-                <a class="btn btn-primary" href="?page=student_list"><i
+                <a class="btn btn-primary" href="?page=<?php if(isset($_SESSION['subid']))
+                    { echo "subject_select_std&subid=".$_SESSION['subid'];}else{ echo "student_list"; }?>"><i
                         class="fa-regular fa-circle-left"></i>&nbsp;กลับ</a>
             </div>
         </div>
-
         <div class="d-flex justify-content-center">
             <div class="py-3 p-md-5 bg-light rounded-5 shadow-lg col-md-8">
                 <form action="?page=student_add" method="post" class="px-0 pt-3" enctype="multipart/form-data">

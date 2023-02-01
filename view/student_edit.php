@@ -7,7 +7,18 @@
         $student = $lms->select('student',"*","id='$id'");
         
     }
-   
+
+    if(isset($_GET['subid'])){
+        
+        $_SESSION['subid']=$_GET['subid'];
+        
+    }
+
+    if(isset($_GET['backp'])){
+        
+        $_SESSION['backp']=$_GET['backp'];
+        
+    }
     
     if(isset($_POST["action"]) && $_POST["action"]=='student_edit'){
         
@@ -51,15 +62,32 @@
                                     
                                     if(!empty($student_add)) {
                                         
-                                        $_SESSION['success'] = "เพิ่มรายชื่อผู้เรียนสำเร็จ!";
-                                        echo "<script>window.location.href='?page=student_list';</script>";
-                                        exit;
+                                        if(isset($_SESSION['subid'])){
+                                    
+                                            $_SESSION['success'] = "แก้ไขรายชื่อนักศึกษาสำเร็จ!";
+                                            echo "<script>window.location.href='?page=subject_select_std&subid=".$_SESSION['subid']."';</script>";
+                                            exit;
+                                            
+                                        }elseif(isset($_SESSION['backp'])){
+                                            
+                                            $_SESSION['success'] = "แก้ไขรายชื่อนักศึกษาสำเร็จ!";
+                                            echo "<script>window.location.href='?page=subject_view&subid=".$_SESSION['backp']."';</script>";
+                                            exit;
+                                            
+                                        }else{
+                                            
+                                            $_SESSION['success'] = "แก้ไขรายชื่อนักศึกษาสำเร็จ!";
+                                            echo "<script>window.location.href='?page=student_list';</script>";
+                                            exit;
+                                            
+                                        }
                                         
                                     }else {
-                                        $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
+                                        
                                         unlink("upload/img_student/$fileName");
-                                        echo "<script>window.history.back();</script>";
+                                        whenerror();
                                         exit;
+                                        
                                     }
                                     
                                 }else {
@@ -76,10 +104,36 @@
                                         
                         }else{
                             
-                            $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบไฟล์ที่เลือก!";
-                            echo "<script> window.history.back()</script>";
-                            exit;
-                            
+                            $student_add = $lms->update('student',['std_id'=>$student_id,'prefix'=>$student_prefix,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'up_time'=>$date],"id='$id'");
+                                    
+                            if(!empty($student_add)) {
+                                
+                                if(isset($_SESSION['subid'])){
+                                    
+                                    $_SESSION['success'] = "แก้ไขรายชื่อนักศึกษาสำเร็จ!";
+                                    echo "<script>window.location.href='?page=subject_select_std&subid=".$_SESSION['subid']."';</script>";
+                                    exit;
+                                    
+                                }elseif(isset($_SESSION['backp'])){
+                                    
+                                    $_SESSION['success'] = "แก้ไขรายชื่อนักศึกษาสำเร็จ!";
+                                    echo "<script>window.location.href='?page=subject_view&subid=".$_SESSION['backp']."';</script>";
+                                    exit;
+                                    
+                                }else{
+                                    
+                                    $_SESSION['success'] = "แก้ไขรายชื่อนักศึกษาสำเร็จ!";
+                                    echo "<script>window.location.href='?page=student_list';</script>";
+                                    exit;
+                                    
+                                }
+                                
+                            }else {
+                                
+                                whenerror();
+                                exit;
+                                
+                            } 
                         }
                         
                     }else{
@@ -118,7 +172,15 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php">หน้าหลัก</a></li>
-                <li class="breadcrumb-item"><a href="?page=student_list">รายชื่อชื่อผู้เรียน</a></li>
+                <?php if(isset($_SESSION['subid'])){ ?>
+                <li class="breadcrumb-item"><a
+                        href="?page=subject_view&subid=<?= $_SESSION['subid'] ?>">รายละเอียดวิชา</a></li>
+                <li class="breadcrumb-item"><a
+                        href="?page=subject_select_std&subid=<?= $_SESSION['subid'] ?>">เพิ่มรายชื่อเข้าชั้นเรียน</a>
+                </li>
+                <?php }else{ ?>
+                <li class="breadcrumb-item"><a href="?page=student_list">รายชื่อผู้เรียน</a></li>
+                <?php } ?>
                 <li class="breadcrumb-item active" aria-current="page">แก้ไขรายชื่อผู้เรียน</li>
             </ol>
         </nav>
@@ -127,8 +189,10 @@
                 <h2>แก้ไขรายชื่อผู้เรียน</h2>
             </div>
             <div class="col-sm-5 text-end">
-                <a class="btn btn-primary" href="?page=student_list"><i
-                        class="fa-regular fa-circle-left"></i>&nbsp;กลับ</a>
+                <a class="btn btn-primary" href="?page=<?php if(isset($_SESSION['subid']))
+                    { echo "subject_select_std&subid=".$_SESSION['subid'];
+                    }elseif(isset($_SESSION['backp'])){ echo "subject_view&subid=".$_SESSION['backp']; }else{
+                        echo "student_list"; }?>"><i class="fa-regular fa-circle-left"></i>&nbsp;กลับ</a>
             </div>
         </div>
 

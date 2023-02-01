@@ -1,8 +1,8 @@
 <?php 
 
-    if(isset($_GET['id'])){
+    if(isset($_GET['subid'])){
 
-        $id = $_GET['id'];
+        $id = $_GET['subid'];
         
         $subject = $lms->select('subject',"*","id='$id'");
     

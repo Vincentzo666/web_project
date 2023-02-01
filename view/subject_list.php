@@ -113,9 +113,9 @@ if(isset($_GET['delete_subject'])){
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
                                     <a type="button" class="btn btn-sm btn-outline-success px-2 "
-                                        href="?page=subject_view&id=<?= $subject_list['id'] ?>">view</a>
+                                        href="?page=subject_view&subid=<?= $subject_list['id'] ?>">view</a>
                                     <a type="button" class="btn btn-sm btn-outline-secondary px-2 "
-                                        href="?page=subject_edit&id=<?= $subject_list['id'] ?>">edit</a>
+                                        href="?page=subject_edit&subid=<?= $subject_list['id'] ?>">edit</a>
                                     <a type="button" class="btn btn-sm btn-outline-danger px-2 delete_subject"
                                         id="<?= $subject_list['id'] ?>"
                                         data-name-sub="<?= $subject_list['name'] ?>">delete</a>
