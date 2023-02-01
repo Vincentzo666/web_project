@@ -106,8 +106,10 @@
                     }
                     
                 }else {
+                    
                     whenerror();
                     exit;
+                    
                 }
                 break;
                 

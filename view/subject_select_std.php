@@ -1,50 +1,58 @@
 <?php
-unset($_SESSION['subid']);
+    unset($_SESSION['subid']);
 
-if(isset($_GET['subid'])){
-    
-    $subid = $_GET['subid'];
-    
-}
-
-if(isset($_GET['subid'])&&isset($_GET['stdid'])){
-    
-    $subid = $_GET['subid'];
-    $stdid = $_GET['stdid'];
-
-    $add_to_sub = $lms->insert('sub_std',['id_subject'=>$subid,'id_student'=>$stdid,'cr_time'=>$date]);
-                            
-    if(!empty($add_to_sub)) {
+    if(isset($_GET['subid'])){
         
-        $_SESSION['success'] = "เพิ่มสำเร็จ!";
-        echo "<script>window.history.back();</script>";
-        exit;
+        $subid = $_GET['subid'];
         
-    }else {
-
-        whenerror();
-        exit;
     }
-}
 
-if(isset($_GET['delete_student'])){
-    
-    $delid = $_GET['delete_student'];
-    $del_std = $lms->delete('student',"id='$delid'");
+    if(isset($_GET['subid'])&&isset($_GET['stdid'])){
+        
+        $subid = $_GET['subid'];
+        $stdid = $_GET['stdid'];
 
-    if(!empty($del_std)) {
+        $add_to_sub = $lms->insert('sub_std',['id_subject'=>$subid,'id_student'=>$stdid,'cr_time'=>$date]);
                                 
-        $_SESSION['success'] = "ลบรายชื่อนี้สำเร็จ!";
-        echo "<script>window.history.back();</script>";
-        exit;
+        if(!empty($add_to_sub)) {
+            
+            $_SESSION['success'] = "เพิ่มสำเร็จ!";
+            echo "<script>window.history.back();</script>";
+            exit;
+            
+        }else {
+
+            whenerror();
+            exit;
+        }
+    }
+
+    if(isset($_GET['delete_student'])){
         
-    } else {
+        $delid = $_GET['delete_student'];
+        $del_std = $lms->delete('student',"id='$delid'");
+
+        if(!empty($del_std)) {
+                                    
+            $_SESSION['success'] = "ลบรายชื่อนี้สำเร็จ!";
+            echo "<script>window.history.back();</script>";
+            exit;
+            
+        } else {
+            
+            whenerror();
+            exit;
+            
+        }   
+    }
+
+    if(isset($_GET['show_std'])){
+
+        $idsh = $_GET['show_std'];
         
-        whenerror();
-        exit;
-        
-    }   
-}
+        $show_std = $lms->select('student',"*","id='$idsh'");        
+
+    }
 ?>
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
@@ -119,7 +127,7 @@ if(isset($_GET['delete_student'])){
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item"
-                                                    href="?page=student_view&id=<?= $student_list['id'] ?>">view</a>
+                                                    href="?page=subject_select_std&subid=<?= $subid ?>&show_std=<?= $student_list['id'] ?>">view</a>
                                             </li>
                                             <li><a class="dropdown-item"
                                                     href="?page=student_edit&subid=<?= $subid ?>&id=<?= $student_list['id'] ?>">edit</a>
@@ -161,5 +169,29 @@ $(document).ready(function() {
             }
         });
     });
+
+    $(document).on('click', '.dmbtn', function() {
+
+        window.history.back();
+    });
+
+    function stdshow() {
+
+        $('#studentModal').modal('show');
+
+    }
+
+    $('#studentModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    <?php if(isset($_GET['show_std'])){?>
+
+    $('#studentModal').modal('show');
+
+
+    <?php } ?>
 });
 </script>
+<?php include('view/student_view.php') ?>

@@ -29,7 +29,15 @@
             
         }   
     }
-    
+
+    if(isset($_GET['show_std'])){
+
+        $idsh = $_GET['show_std'];
+        
+        $show_std = $lms->select('student',"*","id='$idsh'");        
+
+    }
+
 ?>
 <div class="py-5 pt-3" style="background-color:#f0f8ff;">
     <div class="container">
@@ -147,13 +155,14 @@
                                                 data-bs-toggle="dropdown" aria-expanded="false"><b>เลือก</b>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item"
-                                                        href="?page=student_view&stdid=<?= $student_list['id_student'] ?>">view</a>
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="?page=subject_view&subid=<?= $subid ?>&show_std=<?= $student_list['id_student'] ?>">view</a>
                                                 </li>
                                                 <li><a class="dropdown-item"
                                                         href="?page=student_edit&id=<?= $student_list['id_student'] ?>&backp=<?= $subid ?>">edit</a>
                                                 </li>
-                                                <li><a class="dropdown-item delete_student" href="#"
+                                                <li><a class="dropdown-item delete_student"
                                                         id="<?= $student_list['id'] ?>"
                                                         data-name-std="<?= $student_list['fname'].' '.$student_list['lname'] ?>">delete
                                                         from class</a>
@@ -173,6 +182,7 @@
 </div>
 <script>
 $(document).ready(function() {
+
     $(' #example').DataTable();
 
     $(document).on('click', '.delete_student', function() {
@@ -193,5 +203,29 @@ $(document).ready(function() {
             }
         });
     });
+
+    $(document).on('click', '.dmbtn', function() {
+
+        window.history.back();
+    });
+
+    function stdshow() {
+
+        $('#studentModal').modal('show');
+
+    }
+
+    $('#studentModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    <?php if(isset($_GET['show_std'])){?>
+
+    $('#studentModal').modal('show');
+
+
+    <?php } ?>
 });
 </script>
+<?php include('view/student_view.php') ?>
