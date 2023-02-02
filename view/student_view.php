@@ -8,6 +8,13 @@
                 <div class="px-4 text-center">
                     <div class="ps-3">
                         <div class="row">
+                            <div class="col-sm-12 text-secondary">
+                                <img src="upload/img_student/<?= $show_std[0]['std_pic'] ?>"
+                                    style=" width: 220px; height: 220px; object-fit: cover;">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">รหัสนักศึกษา</h6>
                             </div>
