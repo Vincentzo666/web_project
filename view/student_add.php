@@ -20,69 +20,104 @@
 
             $check_student = $lms->select('student',"*","std_id='$student_id'");
             
-            if(!empty($check_student)) {
+            if(empty($check_student)) {
                 
-                $_SESSION['error'] = "รหัสผู้เรียนนี้มีในระบบแล้ว!";
-                echo "<script>window.history.back();</script>";
-                exit;
-                
-            }else{
-            
-                if (!empty($_FILES["student_img"]["name"])) {
+                $check_email = $lms->select('student',"*","email='$student_email'");
 
-                    $targetDir = "upload/img_student/";
-                    $temp = explode(".", $_FILES["student_img"]["name"]);
-                    $fileName = 'student-'.$namedate. '.' . end($temp);
-                    $targetFilePath = $targetDir . $fileName;
-                    $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
-                    $allowTypes = array('jpg', 'png', 'jpeg');
+                if($student_email==''){
+                    
+                    $check_email=null;
+                }
+                    
+                if(empty($check_email)) {
+                    
+                    $check_phone = $lms->select('student',"*","phone='$student_phone'");
 
-                    if (in_array($fileType, $allowTypes)) {
-                        
-                        if (move_uploaded_file($_FILES["student_img"]["tmp_name"], $targetFilePath)) {
-                            
-                            $student_add = $lms->insert('student',['std_id'=>$student_id,'prefix'=>$student_prefix,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'std_pic'=>$fileName,'cr_time'=>$date]);
-                            
-                            if(!empty($student_add)) {
+                    if($student_phone==''){
+                    
+                        $check_phone=null;
+                    }
+                    
+                    if(empty($check_phone)) {
+
+                        if (!empty($_FILES["student_img"]["name"])) {
+
+                            $targetDir = "upload/img_student/";
+                            $temp = explode(".", $_FILES["student_img"]["name"]);
+                            $fileName = 'student-'.$namedate. '.' . end($temp);
+                            $targetFilePath = $targetDir . $fileName;
+                            $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
+                            $allowTypes = array('jpg', 'png', 'jpeg');
+        
+                            if (in_array($fileType, $allowTypes)) {
                                 
-                                if(isset($_SESSION['subid'])){
+                                if (move_uploaded_file($_FILES["student_img"]["tmp_name"], $targetFilePath)) {
                                     
-                                    $_SESSION['success'] = "เพิ่มรายชื่อนักศึกษาสำเร็จ!";
-                                    echo "<script>window.location.href='?page=subject_select_std&subid=".$_SESSION['subid']."';</script>";
-                                    exit;
+                                    $student_add = $lms->insert('student',['std_id'=>$student_id,'prefix'=>$student_prefix,'fname'=>$student_fname,'lname'=>$student_lname,'email'=>$student_email,'phone'=>$student_phone,'std_pic'=>$fileName,'cr_time'=>$date]);
                                     
-                                }else{
+                                    if(!empty($student_add)) {
+                                        
+                                        if(isset($_SESSION['subid'])){
+                                            
+                                            $_SESSION['success'] = "เพิ่มรายชื่อนักศึกษาสำเร็จ!";
+                                            echo "<script>window.location.href='?page=subject_select_std&subid=".$_SESSION['subid']."';</script>";
+                                            exit;
+                                            
+                                        }else{
+                                            
+                                            $_SESSION['success'] = "เพิ่มรายชื่อนักศึกษาสำเร็จ!";
+                                            echo "<script>window.location.href='?page=student_list';</script>";
+                                            exit;
+                                            
+                                        }
+                                        
+                                    }else {
+                                        $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
+                                        unlink("upload/img_student/$fileName");
+                                        echo "<script>window.history.back();</script>";
+                                        exit;
+                                    }
                                     
-                                    $_SESSION['success'] = "เพิ่มรายชื่อนักศึกษาสำเร็จ!";
-                                    echo "<script>window.location.href='?page=student_list';</script>";
-                                    exit;
-                                    
-                                }
+                                }else {
+                                    $_SESSION['error'] = "เกิดข้อผิดพลาด! อัพโหลดไฟล์ไม่สำเร็จ!";
+                                    echo "<script> window.history.back()</script>";
+                                    exit;   
+                                } 
                                 
                             }else {
-                                $_SESSION['error'] = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง!";
-                                unlink("upload/img_student/$fileName");
-                                echo "<script>window.history.back();</script>";
+                                $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่รองรับนามสกุลไฟล์ชนิดนี้!";
+                                echo "<script> window.history.back()</script>";
                                 exit;
                             }
                             
-                        }else {
-                            $_SESSION['error'] = "เกิดข้อผิดพลาด! อัพโหลดไฟล์ไม่สำเร็จ!";
+                        }else{
+                            $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบไฟล์ที่เลือก!";
                             echo "<script> window.history.back()</script>";
-                            exit;   
-                        } 
+                            exit;
+                        }
                         
-                    }else {
-                        $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่รองรับนามสกุลไฟล์ชนิดนี้!";
+                    }else{
+
+                        $_SESSION['error'] = "เบอร์โทรศัพท์นี้มีในระบบแล้ว!";
                         echo "<script> window.history.back()</script>";
                         exit;
+
                     }
                     
                 }else{
-                    $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบไฟล์ที่เลือก!";
+
+                    $_SESSION['error'] = "อีเมลล์นี้มีในระบบแล้ว!";
                     echo "<script> window.history.back()</script>";
                     exit;
+                    
                 }
+                
+            }else{
+
+                $_SESSION['error'] = "รหัสผู้เรียนนี้มีในระบบแล้ว!";
+                echo "<script>window.history.back();</script>";
+                exit;
+            
             }  
              
         }else{

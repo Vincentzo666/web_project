@@ -67,12 +67,22 @@
                     $teacher_phone = mysqli_real_escape_string($lms->dbConnect, trim($_POST['teacher_phone']));
                     
                     $check_email = $lms->select('teacher',"*","id !='$id_teacher' AND email='$teacher_email'");
+
+                    if($teacher_email==''){
+                    
+                        $teacher_email=null;
+                    }
                     
                     if(empty($check_email)) {
                         
                         $check_phone = $lms->select('teacher',"*","id !='$id_teacher' AND phone='$teacher_phone'");
+
+                        if($teacher_phone==''){
+                    
+                            $teacher_phone=null;
+                        }
                         
-                        if(!empty($check_phone)) {
+                        if(empty($check_phone)) {
                         
                             $teacher_edit2 = $lms->update('teacher',['fname'=>$teacher_fname,'lname'=>$teacher_lname,'email'=>$teacher_email,'phone'=>$teacher_phone,'up_time'=>$date],"id='$id_teacher'"); 
                             

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 27, 2023 at 10:54 AM
+-- Generation Time: Feb 02, 2023 at 07:49 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -37,9 +37,24 @@ CREATE TABLE `student` (
   `phone` varchar(11) DEFAULT NULL,
   `std_pic` varchar(255) NOT NULL,
   `cr_time` datetime NOT NULL,
-  `up_time` datetime DEFAULT NULL,
-  `add_by` int(11) NOT NULL
+  `up_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `student`
+--
+
+INSERT INTO `student` (`id`, `std_id`, `prefix`, `fname`, `lname`, `email`, `phone`, `std_pic`, `cr_time`, `up_time`) VALUES
+(8, '111', '', 'ghm', 'b', 'b@gmail.com', '0807502947', 'aaa', '2023-02-01 03:53:43', '2023-02-01 14:33:19'),
+(9, '222', '', 'bbb', 'bbb', '', '099123456', 'bbb', '2023-02-01 03:53:43', '2023-02-02 13:33:55'),
+(10, '333', NULL, 'ccc', 'ccc', NULL, NULL, 'ccc', '2023-02-01 03:54:42', NULL),
+(11, '444', '', 'ddd', 'ddd', '', '000', 'ddd', '2023-02-01 03:54:42', '2023-02-01 11:59:33'),
+(12, '555', NULL, 'eee', 'eee', NULL, NULL, 'eee', '2023-02-01 03:55:13', NULL),
+(13, '666', 'fff', 'fff', '', NULL, NULL, 'fff', '2023-02-01 03:55:13', NULL),
+(14, '62114340160', 'นาย', 'j', 'k', '', '', 'student-20230201131839.png', '2023-02-01 13:18:39', NULL),
+(15, '621143401', 'นาง', 'ghm', 'b', 'yub@gmail.com', '', 'student-20230201133158.png', '2023-02-01 13:31:58', NULL),
+(16, '64853864564', 'นาย', 'ghm', 'b', 'yub@gmail.com', '', 'student-20230201133257.png', '2023-02-01 13:32:57', NULL),
+(17, '777', 'นาย', 'j', 'k', '', '', 'student-20230202133613.png', '2023-02-02 13:36:13', NULL);
 
 -- --------------------------------------------------------
 
@@ -63,30 +78,8 @@ CREATE TABLE `subject` (
 --
 
 INSERT INTO `subject` (`id`, `sub_id`, `id_teacher`, `name`, `detail`, `image`, `cr_time`, `up_time`) VALUES
-(1, '62445hl', 15, 'information technology', 'esugybkrrrrrrbhbbbrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', NULL, '2023-01-27 11:50:04', NULL),
-(2, '62445oo', 15, 'information t', 'uyskhb J bNS', NULL, '2023-01-27 11:50:47', NULL),
-(3, 'bs5', 15, 'informa', '', NULL, '2023-01-27 11:51:08', NULL),
-(4, 'aetjzh', 15, 'tjs', '', NULL, '2023-01-27 11:55:03', NULL),
-(5, 'bs5s', 15, 'dz', '', NULL, '2023-01-27 11:56:06', NULL),
-(6, 'aeh', 15, 'aej', '', 'subject-20230127115731.png', '2023-01-27 11:57:31', NULL),
-(7, '62445hl', 15, 'information technology', 'esugybkrrrrrrbhbbbrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', NULL, '2023-01-27 11:50:04', NULL),
-(8, '62445oo', 15, 'information t', 'uyskhb J bNS', NULL, '2023-01-27 11:50:47', NULL),
-(9, 'bs5', 15, 'informa', '', NULL, '2023-01-27 11:51:08', NULL),
-(10, 'aetjzh', 15, 'tjs', '', NULL, '2023-01-27 11:55:03', NULL),
-(11, 'bs5s', 15, 'dz', '', NULL, '2023-01-27 11:56:06', NULL),
-(12, 'aeh', 15, 'aej', '', 'subject-20230127115731.png', '2023-01-27 11:57:31', NULL),
-(13, '62445hl', 15, 'information technology', 'esugybkrrrrrrbhbbbrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', NULL, '2023-01-27 11:50:04', NULL),
-(14, '62445oo', 15, 'information t', 'uyskhb J bNS', NULL, '2023-01-27 11:50:47', NULL),
-(15, 'bs5', 15, 'informa', '', NULL, '2023-01-27 11:51:08', NULL),
-(16, 'aetjzh', 15, 'tjs', '', NULL, '2023-01-27 11:55:03', NULL),
-(17, 'bs5s', 15, 'dz', '', NULL, '2023-01-27 11:56:06', NULL),
-(18, 'aeh', 15, 'aej', '', 'subject-20230127115731.png', '2023-01-27 11:57:31', NULL),
-(19, '62445hl', 15, 'information technology', 'esugybkrrrrrrbhbbbrhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh', NULL, '2023-01-27 11:50:04', NULL),
-(20, '62445oo', 15, 'information t', 'uyskhb J bNS', NULL, '2023-01-27 11:50:47', NULL),
-(21, 'bs5', 15, 'informa', '', NULL, '2023-01-27 11:51:08', NULL),
-(22, 'aetjzh', 15, 'tjs', '', NULL, '2023-01-27 11:55:03', NULL),
-(23, 'bs5s', 15, 'dz', '', NULL, '2023-01-27 11:56:06', NULL),
-(24, 'aeh', 15, 'aej', '', 'subject-20230127115731.png', '2023-01-27 11:57:31', NULL);
+(29, '111', 15, 'sub1', NULL, NULL, '2023-02-01 03:56:07', NULL),
+(30, '222', 15, 'sub2', NULL, NULL, '2023-02-01 03:56:07', NULL);
 
 -- --------------------------------------------------------
 
@@ -98,9 +91,22 @@ CREATE TABLE `sub_std` (
   `id` int(11) NOT NULL,
   `id_subject` int(11) NOT NULL,
   `id_student` int(11) NOT NULL,
-  `createdate` datetime NOT NULL,
-  `updatedate` datetime DEFAULT NULL
+  `cr_time` datetime NOT NULL,
+  `up_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `sub_std`
+--
+
+INSERT INTO `sub_std` (`id`, `id_subject`, `id_student`, `cr_time`, `up_time`) VALUES
+(9, 29, 8, '2023-02-01 03:57:39', NULL),
+(10, 29, 9, '2023-02-01 03:57:39', NULL),
+(11, 30, 10, '2023-02-01 03:58:07', NULL),
+(12, 30, 11, '2023-02-01 03:58:07', NULL),
+(14, 30, 9, '2023-02-01 03:58:44', NULL),
+(15, 29, 10, '2023-02-01 14:01:54', NULL),
+(16, 29, 11, '2023-02-01 14:02:07', NULL);
 
 -- --------------------------------------------------------
 
@@ -127,7 +133,7 @@ CREATE TABLE `teacher` (
 --
 
 INSERT INTO `teacher` (`id`, `prefix`, `fname`, `lname`, `email`, `phone`, `profile`, `username`, `password`, `cr_time`, `up_time`) VALUES
-(15, NULL, 'thanawat', 'ladda', 'thanawat.la.62@ubu.ac.th', NULL, NULL, 'jomtap', '111111', '2023-01-23 14:02:35', NULL);
+(15, 'นาย', 'ธนวัฒน์', 'ลัดดา', 'thanawat.la.62@ubu.ac.th', '0991861363', 'teacher-20230130161944.jpg', 'jom', 'lpd1oKW84i4=', '2023-01-23 14:02:35', '2023-01-30 16:42:23');
 
 --
 -- Indexes for dumped tables
@@ -137,8 +143,7 @@ INSERT INTO `teacher` (`id`, `prefix`, `fname`, `lname`, `email`, `phone`, `prof
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `addby` (`add_by`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `subject`
@@ -169,35 +174,29 @@ ALTER TABLE `teacher`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `sub_std`
 --
 ALTER TABLE `sub_std`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `student`
---
-ALTER TABLE `student`
-  ADD CONSTRAINT `addby` FOREIGN KEY (`add_by`) REFERENCES `teacher` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `subject`

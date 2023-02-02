@@ -38,10 +38,20 @@
             if(empty($check_studentid)) {
                 
                 $check_email = $lms->select('student',"*","id !='$id' AND email='$student_email'");
+
+                if($student_email==''){
+                    
+                    $check_email=null;
+                }
                     
                 if(empty($check_email)) {
                     
                     $check_phone = $lms->select('student',"*","id !='$id' AND phone='$student_phone'");
+
+                    if($student_phone==''){
+                    
+                        $check_phone=null;
+                    }
                     
                     if(empty($check_phone)) {
                         

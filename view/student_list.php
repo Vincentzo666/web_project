@@ -1,22 +1,30 @@
 <?php
-if(isset($_GET['delete_student'])){
-    
-    $id = $_GET['delete_student'];
-    $del_std = $lms->delete('student',"id='$id'");
+    if(isset($_GET['delete_student'])){
+        
+        $id = $_GET['delete_student'];
+        $del_std = $lms->delete('student',"id='$id'");
 
-    if(!empty($del_std)) {
-                                
-        $_SESSION['success'] = "ลบรายชื่อนี้สำเร็จ!";
-        echo "<script>window.history.back();</script>";
-        exit;
+        if(!empty($del_std)) {
+                                    
+            $_SESSION['success'] = "ลบรายชื่อนี้สำเร็จ!";
+            echo "<script>window.history.back();</script>";
+            exit;
+            
+        } else {
+            
+            whenerror();
+            exit;
+            
+        }   
+    }
+
+    if(isset($_GET['show_std'])){
+
+        $idsh = $_GET['show_std'];
         
-    } else {
-        
-        whenerror();
-        exit;
-        
-    }   
-}
+        $show_std = $lms->select('student',"*","id='$idsh'");        
+
+    }
 ?>
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
@@ -76,7 +84,7 @@ if(isset($_GET['delete_student'])){
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item"
-                                                    href="?page=student_view&id=<?= $student_list['id'] ?>">view</a>
+                                                    href="?page=student_list&show_std=<?= $student_list['id'] ?>">view</a>
                                             </li>
                                             <li><a class="dropdown-item"
                                                     href="?page=student_edit&id=<?= $student_list['id'] ?>">edit</a>
@@ -118,5 +126,29 @@ $(document).ready(function() {
             }
         });
     });
+
+    $(document).on('click', '.dmbtn', function() {
+
+        window.history.back();
+    });
+
+    function stdshow() {
+
+        $('#studentModal').modal('show');
+
+    }
+
+    $('#studentModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    <?php if(isset($_GET['show_std'])){?>
+
+    $('#studentModal').modal('show');
+
+
+    <?php } ?>
 });
 </script>
+<?php include('view/student_view.php') ?>
