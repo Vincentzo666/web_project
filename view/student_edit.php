@@ -59,7 +59,7 @@
                             
                             $targetDir = "upload/img_student/";
                             $temp = explode(".", $_FILES["student_img"]["name"]);
-                            $fileName = 'student-'.$namedate. '.' . end($temp);
+                            $fileName = $student_fname.'-'.$student_id. '.' . end($temp);
                             $targetFilePath = $targetDir . $fileName;
                             $fileType = strtolower(pathinfo($targetFilePath, PATHINFO_EXTENSION));
                             $allowTypes = array('jpg', 'png', 'jpeg');
