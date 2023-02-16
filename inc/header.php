@@ -49,10 +49,6 @@ session_start();
     <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
     <!-- Data table -->
 
-    <script src="js/face-api.js"></script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-
 
 </head>
 <!-- style="background-color:#212529;" -->
