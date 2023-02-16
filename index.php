@@ -76,6 +76,10 @@ include("inc/navbar.php");
             case "subject_select_std":
                 include("view/subject_select_std.php");
                 break;
+
+            case "classroom":
+                include("view/classroom.php");
+                break;
                 
             default:
             include("view/subject_list.php");
