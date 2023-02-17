@@ -171,6 +171,8 @@
                 str = str.substring(0, str.indexOf('('))
                 str = str.substring(0, str.length - 1)
                 console.log(rating)
+                console.log(str)
+
                 if(str != "unknown"){
                   if(rating > 0.5){
                       console.log("Match TRUE!")

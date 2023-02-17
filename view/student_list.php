@@ -18,13 +18,6 @@
         }   
     }
 
-    if(isset($_GET['show_std'])){
-
-        $idsh = $_GET['show_std'];
-        
-        $show_std = $lms->select('student',"*","id='$idsh'");        
-
-    }
 ?>
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
@@ -41,7 +34,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="main-box clearfix">
-                        <table class="table user-list" id="example">
+                        <table class="table user-list" id="studentTable">
                             <thead>
                                 <tr>
                                     <th style="width:7%;"><span>รูปภาพ</span></th>
@@ -83,8 +76,11 @@
                                             data-bs-toggle="dropdown" aria-expanded="false"><b>เลือก</b>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item"
-                                                    href="?page=student_list&show_std=<?= $student_list['id'] ?>">view</a>
+                                            <li><a class="dropdown-item stdview" id="<?= $student_list['id'] ?>"
+                                                    data-bs-toggle="modal" data-bs-target="#studentModal">view</a>
+                                            </li>
+                                            <li><a class="dropdown-item" 
+                                                     href="?page=student_train&id=<?= $student_list['id'] ?>">train</a>
                                             </li>
                                             <li><a class="dropdown-item"
                                                     href="?page=student_edit&id=<?= $student_list['id'] ?>">edit</a>
@@ -105,8 +101,9 @@
     </div>
 </div>
 <script>
-$(document).ready(function() {
-    $(' #example').DataTable();
+    $(document).ready(function() {
+        $('#studentTable').DataTable();
+    });
 
     $(document).on('click', '.delete_student', function() {
         var id = $(this).attr("id");
@@ -127,28 +124,43 @@ $(document).ready(function() {
         });
     });
 
-    $(document).on('click', '.dmbtn', function() {
+    $(document).on('click', '.stdview', function() {
+        var id = $(this).attr("id");
 
-        window.history.back();
+        if (id != "") {
+            $.ajax({
+                type: "POST",
+                url: "http://localhost/web_project/php/ajax.php",
+                data: {
+                    stdview: id
+                },
+                success: function(response) {
+                    var jsonData = JSON.parse(response);
+                    if (jsonData.success == "1") {
+
+                        $('#result1').attr("src","upload/img_student/"+jsonData.result1);
+                        $('#result2').html(jsonData.result2);
+                        $('#result3').html(jsonData.result3);
+                        $('#result4').html(jsonData.result4);
+                        $('#result5').html(jsonData.result5);
+                        $('#result6').html(jsonData.result6);
+                        $('#result7').html(jsonData.result7);
+
+                    } else if (jsonData.success == "2") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'ไม่พบข้อมูลนี้',
+                            showConfirmButton: true,
+                            timer: '5000'
+                        })
+
+                    } else {
+                        console.log("no value")
+                    }
+                }
+            });
+        }
     });
-
-    function stdshow() {
-
-        $('#studentModal').modal('show');
-
-    }
-
-    $('#studentModal').modal({
-        backdrop: 'static',
-        keyboard: false
-    })
-
-    <?php if(isset($_GET['show_std'])){?>
-
-    $('#studentModal').modal('show');
-
-
-    <?php } ?>
-});
 </script>
 <?php include('view/student_view.php') ?>

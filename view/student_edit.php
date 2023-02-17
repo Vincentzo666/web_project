@@ -6,6 +6,10 @@
         
         $student = $lms->select('student',"*","id='$id'");
         
+    }else{
+        $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบข้อมูล!";
+        echo "<script> window.history.back()</script>";
+        exit;
     }
 
     if(isset($_GET['subid'])){

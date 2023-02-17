@@ -81,6 +81,9 @@ include("inc/navbar.php");
                 include("view/classroom.php");
                 break;
                 
+            case "student_train":
+                include("view/student_train.php");
+                break;
             default:
             include("view/subject_list.php");
         }

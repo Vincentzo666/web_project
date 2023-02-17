@@ -9,7 +9,7 @@
                     <div class="ps-3">
                         <div class="row">
                             <div class="col-sm-12 text-secondary">
-                                <img src="upload/img_student/<?= $show_std[0]['std_pic'] ?>"
+                                <img src="" id="result1"
                                     style=" width: 220px; height: 220px; object-fit: cover;">
                             </div>
                         </div>
@@ -18,17 +18,15 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">รหัสนักศึกษา</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <?= $show_std[0]['std_id'] ?>
-                            </div>
+                            <p class="col-sm-9 text-secondary" id="result2">
+                            </p>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">คำนำหน้า</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <?= $show_std[0]['prefix'] ?>
+                            <div class="col-sm-9 text-secondary" id="result3">
                             </div>
                         </div>
                         <hr>
@@ -36,8 +34,7 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">ชื่อ</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <?= $show_std[0]['fname'] ?>
+                            <div class="col-sm-9 text-secondary" id="result4">
                             </div>
                         </div>
                         <hr>
@@ -45,8 +42,7 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">นามสกุล</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <?= $show_std[0]['lname'] ?>
+                            <div class="col-sm-9 text-secondary" id="result5">
                             </div>
                         </div>
                         <hr>
@@ -54,8 +50,7 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">อีเมล์</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <?= $show_std[0]['email'] ?>
+                            <div class="col-sm-9 text-secondary" id="result6">
                             </div>
                         </div>
                         <hr>
@@ -63,8 +58,7 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">เบอร์โทร</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                <?= $show_std[0]['phone'] ?>
+                            <div class="col-sm-9 text-secondary" id="result7">
                             </div>
                         </div>
                         <br>
