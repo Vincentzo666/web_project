@@ -1,5 +1,13 @@
 <?php 
 
+    if(!isset($_SESSION['id_teacher'])){
+
+        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
+        echo "<script>window.location.href='auth/login.php';</script>";
+        exit;
+        
+    }
+
     if(isset($_GET['id'])){
 
         $id = $_GET['id'];
@@ -212,7 +220,7 @@
 
         <div class="d-flex justify-content-center">
             <div class="py-3 p-md-5 bg-light rounded-5 shadow-lg col-md-8">
-                <form action="?page=student_edit" method="post" class="px-0 pt-3" enctype="multipart/form-data">
+                <form action="?page=student_edit&id=<?= $student[0]['id'] ?>" method="post" class="px-0 pt-3" enctype="multipart/form-data">
                     <div class="row mb-3 d-flex justify-content-center">
                         <label for="input" class="col-sm-2 col-form-label">รหัสผู้เรียน
                             <span class="text-danger">*</span></label>

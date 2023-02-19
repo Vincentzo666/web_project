@@ -1,4 +1,12 @@
 <?php
+    if(!isset($_SESSION['id_teacher'])){
+
+        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
+        echo "<script>window.location.href='auth/login.php';</script>";
+        exit;
+        
+    }
+
     $teacher = $lms->select('teacher',"*","id='$id_teacher'");
     if(empty($teacher)){
         

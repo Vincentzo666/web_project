@@ -1,4 +1,13 @@
 <?php
+
+    if(!isset($_SESSION['id_teacher'])){
+
+        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
+        echo "<script>window.location.href='auth/login.php';</script>";
+        exit;
+        
+    }
+
     unset($_SESSION['subid']);
 
     if(isset($_GET['subid'])){
@@ -121,6 +130,9 @@
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item stdview" id="<?= $student_list['id'] ?>"
                                                     data-bs-toggle="modal" data-bs-target="#studentModal">view</a>
+                                            </li>
+                                            <li><a class="dropdown-item" 
+                                                     href="?page=student_train&id=<?= $student_list['id'] ?>">train</a>
                                             </li>
                                             <li><a class="dropdown-item"
                                                     href="?page=student_edit&subid=<?= $subid ?>&id=<?= $student_list['id'] ?>">edit</a>

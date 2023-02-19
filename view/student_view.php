@@ -1,3 +1,14 @@
+<?php
+
+    if(!isset($_SESSION['id_teacher'])){
+
+        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
+        echo "<script>window.location.href='auth/login.php';</script>";
+        exit;
+        
+    }
+
+?>
 <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="studentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

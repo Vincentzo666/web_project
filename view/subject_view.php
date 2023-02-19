@@ -1,5 +1,13 @@
 <?php
 
+    if(!isset($_SESSION['id_teacher'])){
+
+        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
+        echo "<script>window.location.href='auth/login.php';</script>";
+        exit;
+        
+    }
+
     unset($_SESSION['subid']);
     unset($_SESSION['backp']);
 
@@ -149,6 +157,9 @@
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item stdview" id="<?= $student_list['id_student'] ?>"
                                                         data-bs-toggle="modal" data-bs-target="#studentModal">view</a>
+                                                </li>
+                                                <li><a class="dropdown-item" 
+                                                     href="?page=student_train&id=<?= $student_list['id_student'] ?>">train</a>
                                                 </li>
                                                 <li><a class="dropdown-item"
                                                         href="?page=student_edit&id=<?= $student_list['id_student'] ?>&backp=<?= $subid ?>">edit</a>

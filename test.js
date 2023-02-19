@@ -1,9 +1,9 @@
 
     var data = [
-      {"FirstName":"Test1","LastName":"User","Email":"test@test.com","City":"ahmedabad","State":"sk","Country":"canada","Status":"False","iUserID":"23"},
-      {"FirstName":"user","LastName":"user","Email":"u@u.com","City":"ahmedabad","State":"Gujarat","Country":"India","Status":"True","iUserID":"41"},
-      {"FirstName":"Ropbert","LastName":"Jones","Email":"Robert@gmail.com","City":"NewYork","State":"gfg","Country":"fgdfgdfg","Status":"True","iUserID":"48"},
-      {"FirstName":"hitesh","LastName":"prajapti","Email":"h.prajapati@zzz.com","City":"","State":"","Country":"","Status":"True","iUserID":"78"}
+      {"Name":"Test1","dec":"123"},
+      {"Name":"user","dec":"456"},
+      {"Name":"Ropbert","dec":"789"},
+      {"Name":"hitesh","dec":"101112"}
       ]
     //console.log(data)
     //delete data.result[1]
@@ -15,11 +15,31 @@
     //   }
     //   console.log(i)
     // }
+    // for (let [i, user] of data.entries()) {
+    //     if (user.Name === "user") {
+    //       data[i]['img']='kkkkkk';
+    //       break;
+    //     }
+    //     //console.log(i)
+    // }
+
+    var filtered = data.filter(a => a.Name == "user");
+    console.log(filtered);
+
+    data.filter(function(item,index){
+      if(item.Name == "user"){
+        console.log(data[index].dec) ;
+      }       
+    });
+
+    
+    
+
     console.log("**********")
     //console.log(data)
-    count=0
-    for( i=count-1;i>=0;i--){
-      console.log(i)
-    }
-    console.log(i)
-    console.log(count)
+    // count=0
+    // for( i=count-1;i>=0;i--){
+    //   console.log(i)
+    // }
+    // console.log(i)
+    // console.log(count)

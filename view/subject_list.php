@@ -1,40 +1,49 @@
 <?php 
-$_SESSION['sx']='name ASC';
-$sqlx = '';
 
-if(isset($_POST['search'])){
-    $input_search = $_POST['search'];
-    $_SESSION['keyword_subject'] = $input_search;
-    $_SESSION['subject_sx'] = " AND name LIKE '%$input_search%'";
-    
-}
+    if(!isset($_SESSION['id_teacher'])){
 
-if(!isset($_SESSION['keyword_subject'])){
-    $_SESSION['keyword_subject']='';
-}
-
-if(isset($_SESSION['subject_sx'])){
-    $sqlx = $_SESSION['subject_sx'];
-}
-
-if(isset($_GET['delete_subject'])){
-    
-    $id = $_GET['delete_subject'];
-    $del_std = $lms->delete('subject',"id='$id'");
-
-    if(!empty($del_std)) {
-                                
-        $_SESSION['success'] = "ลบรายวิชานี้สำเร็จ!";
-        echo "<script>window.history.back();</script>";
+        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
+        echo "<script>window.location.href='auth/login.php';</script>";
         exit;
         
-    } else {
+    }
+
+    $_SESSION['sx']='name ASC';
+    $sqlx = '';
+
+    if(isset($_POST['search'])){
+        $input_search = $_POST['search'];
+        $_SESSION['keyword_subject'] = $input_search;
+        $_SESSION['subject_sx'] = " AND name LIKE '%$input_search%'";
         
-        whenerror();
-        exit;
+    }
+
+    if(!isset($_SESSION['keyword_subject'])){
+        $_SESSION['keyword_subject']='';
+    }
+
+    if(isset($_SESSION['subject_sx'])){
+        $sqlx = $_SESSION['subject_sx'];
+    }
+
+    if(isset($_GET['delete_subject'])){
         
-    }   
-}
+        $id = $_GET['delete_subject'];
+        $del_std = $lms->delete('subject',"id='$id'");
+
+        if(!empty($del_std)) {
+                                    
+            $_SESSION['success'] = "ลบรายวิชานี้สำเร็จ!";
+            echo "<script>window.history.back();</script>";
+            exit;
+            
+        } else {
+            
+            whenerror();
+            exit;
+            
+        }   
+    }
 ?>
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
