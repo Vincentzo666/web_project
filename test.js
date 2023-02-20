@@ -29,7 +29,8 @@
     data.filter(function(item,index){
       if(item.Name == "user"){
         console.log(data[index].dec) ;
-      }       
+        return false;
+      }  
     });
 
     

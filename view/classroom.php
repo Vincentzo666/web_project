@@ -7,6 +7,18 @@ if (!isset($_SESSION['id_teacher'])) {
   exit;
 }
 
+if(isset($_GET['subid'])){
+
+  $subid = $_GET['subid'];
+
+}else{
+
+  $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบข้อมูล!";
+  echo "<script> window.history.back()</script>";
+  exit;
+
+}
+
 ?>
 <style>
   .spinner-wrapper {
@@ -35,20 +47,100 @@ if (!isset($_SESSION['id_teacher'])) {
   &nbsp;<h4>&nbsp;Loading...</h4>
 </div>
 
-<div id="parent1">
+<div id="parent1" style="display:flex;background-color:#f0f8ff;min-height:740px;">
   <div class="margin" style="position: relative; float:center; margin: 50px; ">
     <video id="vidDisplay" style="width: 800px; height: 600px; display: inline-block; vertical-align: baseline; border: 3px solid black;" onloadedmetadata="onPlay(this)" autoplay="true"></video>
     <canvas id="overlay" style="position: absolute; top: 0; left: 0;" width="800" height="600" />
   </div>
 
-  <div id="parent2" style="float:left;">
-    <a class="btn btn-warning ms-5" id="backpage"><i class="fa-regular fa-circle-left"></i>&nbsp;กลับ</a>
-    <br><br>
-    <img id="prof_img" style="margin-left: 210px; height:200px; width: 200px; border: 3px solid black; border-radius: 10px;object-fit:cover;"></img><br><br>
-    <div id="log_name" style="font-size: 35px; font-weight: bold; margin-left: 40px; width: 570px; white-space: pre-wrap; text-align: center;object-fit:cover;"></div><br>
-    <div style="margin-left: 40px; width: 570px; border: 3px solid black;"></div><br>
+  <div id="parent2" style="margin:50px 0 0 25px;" class="col-sm-4">
+    <div class="text-end">
+      <a class="btn btn-warning" id="backpage"><i class="fa-regular fa-circle-left"></i>&nbsp;กลับ</a>
+    </div><br>
+    <button id="statusss" class="btn btn-success btn-md ssstart">Start Classroom</button><br><br>
+    <div style="display:flex;">
+      <div style="width:105px;">
+        <img id="prof_img" style="height:100px; width: 100px; border: 1px solid black; border-radius: 10px;object-fit:cover;"></img>
+      </div>
+      <div style="width:400px;padding-top:30px;">
+        <h4 id="log_name" style="margin-left:20px;height:40px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></h4>
+      </div>
+      <input type="hidden" id="subid" value="<?= $subid ?>">
+      <input type="hidden" id="last_id" >
+    </div>
   </div>
 </div>
+
+<script>
+  function callssstart() {
+
+    $("#statusss").removeClass("ssstart btn-success")
+    $("#statusss").addClass("ssstop btn-danger")
+    $("#statusss").html('Stop Classroom');
+
+    var subid = $("#subid").val();
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost/web_project/php/ajax.php",
+      data: {
+        timestart: '<?= $date ?>',
+        subid:subid
+      },
+      success: function(response) {
+        var jsonData = JSON.parse(response);
+        if (jsonData.success == "1") {
+          console.log("yess cr");
+          $("#last_id").val(jsonData.last_id)
+        }
+      }
+    });
+
+  };
+
+  function callssstop() {
+    $("#statusss").removeClass("ssstop btn-danger")
+    $("#statusss").addClass("ssstart btn-success")
+    $("#statusss").html('Start Classroom');
+
+    var last_id = $("#last_id").val();
+
+    $.ajax({
+      type: "POST",
+      url: "http://localhost/web_project/php/ajax.php",
+      data: {
+        timestop: '<?= $date ?>',
+        thisid: last_id
+      },
+      success: function(response) {
+        var jsonData = JSON.parse(response);
+        if(jsonData.success == "1") {
+          console.log("yess up");
+        }
+      }
+    });
+
+  };
+
+  $(document).on('click', '#backpage', function() {
+    window.history.back()
+  });
+
+  var canClick = true;
+  $("#statusss").click(function() {
+    if (canClick) {
+      canClick = false;
+      if ($("#statusss").hasClass('ssstart')) {
+        callssstart();
+      } else if ($("#statusss").hasClass('ssstop')) {
+        callssstop();
+      }
+      setTimeout(() => {
+        canClick = true
+      }, 5000);
+    }
+  });
+</script>
 
 <script>
   //----------------------------GLOBAL VARIABLE FOR FACE MATCHER------------------------------------
@@ -102,8 +194,6 @@ if (!isset($_SESSION['id_teacher'])) {
     return new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
   }
 
-  //var dataFetch = undefined;
-
   function dtfetch() {
     var resultt = $.ajax({
       datatype: 'json',
@@ -116,20 +206,9 @@ if (!isset($_SESSION['id_teacher'])) {
     return resultt;
   }
 
-  // async function jparse(data) {
-  //   return dataFetch = JSON.parse(data);
-  // }
-
-  // async function asyncCall() {
-  //   console.log('calling');
-  //   console.log( await dtfetch());
-  //   // var result = await dtfetch();
-  //   // console.log(result);
-  // }
-
-  //asyncCall();
+  //var dataFetch = undefined;
   var dataFetch = undefined;
-
+  //asyncCall();
   async function onPlay() {
 
     if (dataFetch == undefined) {
@@ -188,9 +267,11 @@ if (!isset($_SESSION['id_teacher'])) {
       const result = faceMatcher.findBestMatch(detection.descriptor)
 
       if (result) {
-        
+
         const box = resizedDetections.detection.box
-        const drawBox = new faceapi.draw.DrawBox(box, {label: result.toString()})
+        const drawBox = new faceapi.draw.DrawBox(box, {
+          label: result.toString()
+        })
         drawBox.draw(canvas)
         console.log(result.toString())
         var str = result.toString()
@@ -204,6 +285,25 @@ if (!isset($_SESSION['id_teacher'])) {
             dtf.filter(function(item, index) {
               if (item._label == str) {
                 $("#prof_img").attr('src', dtf[index].imgpath);
+                var subid = $("#subid").val();
+                $.ajax({
+                  type: "POST",
+                  url: "http://localhost/web_project/php/ajax.php",
+                  data: {
+                    std_checkin: dtf[index].std_id,
+                    sub_checkin: subid,
+                    time_checkin: '<?= $date ?>'
+                  },
+                  success: function(response) {
+                    var jsonData = JSON.parse(response);
+                    if (jsonData.success == "1") {
+
+                      // $('#result1').attr("src", "upload/img_student/" + jsonData.result1);
+                      // $('#result2').html(jsonData.result2);
+
+                    }
+                  }
+                });
               }
             });
             $("#log_name").html(str)

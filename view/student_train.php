@@ -150,9 +150,7 @@ function getFaceDetectorOptions() {
         scoreThreshold
     });
 }
-</script>
 
-<script>
 $(document).ready(async function() {
 
     var counter = 5;

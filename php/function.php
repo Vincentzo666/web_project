@@ -66,7 +66,7 @@ class lms{
 		$result = $this->dbConnect->query($sql);
 		
 		if(!$result){
-			die('Error in query: '. mysqli_error());
+			die('Error in query: '. mysqli_error($this->dbConnect));
 		}
 		$data= array();
 		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
