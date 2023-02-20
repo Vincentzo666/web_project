@@ -9,6 +9,17 @@
     }
 
     if(isset($_GET['delete_student'])){
+
+        function remove_json_row($json, $field, $to_find) {
+
+            for($i = 0, $len = count($json); $i < $len; ++$i) {
+                if ($json[$i][$field] == $to_find) {
+                    array_splice($json, $i, 1); 
+                }   
+            }   
+    
+            return $json;
+        }  
         
         $id = $_GET['delete_student'];
         $del_std = $lms->delete('student',"id='$id'");
@@ -16,6 +27,13 @@
         if(!empty($del_std)) {
                                     
             $_SESSION['success'] = "ลบรายชื่อนี้สำเร็จ!";
+
+            $json = file_get_contents('data/neural.json');
+            $decoded = json_decode($json, true);
+            $decoded = remove_json_row($decoded, 'std_id', $id);
+            $json = json_encode($decoded);
+            file_put_contents('data/neural.json', $json);
+
             echo "<script>window.history.back();</script>";
             exit;
             
@@ -24,7 +42,7 @@
             whenerror();
             exit;
             
-        }   
+        }
     }
 
 ?>

@@ -123,7 +123,11 @@
                                 <div class="btn-group">
                                     <a type="button" class="btn btn-sm btn-outline-success px-2 "
                                         href="?page=subject_view&subid=<?= $subject_list['id'] ?>">view</a>
+                                    <a type="button" class="btn btn-sm btn-outline-primary px-2 "
+                                        href="?page=classroom&subid=<?= $subject_list['id'] ?>">start</a>
                                     <a type="button" class="btn btn-sm btn-outline-secondary px-2 "
+                                        href="?page=report&subid=<?= $subject_list['id'] ?>">report</a>
+                                    <a type="button" class="btn btn-sm btn-outline-warning px-2 "
                                         href="?page=subject_edit&subid=<?= $subject_list['id'] ?>">edit</a>
                                     <a type="button" class="btn btn-sm btn-outline-danger px-2 delete_subject"
                                         id="<?= $subject_list['id'] ?>"

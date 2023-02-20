@@ -197,7 +197,8 @@ $(document).ready(async function() {
                             url: 'http://localhost/web_project/php/json.php',
                             type: 'POST',
                             data: {
-                                myData: JSON.stringify(postData)
+                                myData: JSON.stringify(postData),
+                                kcheck: std_id
                             },
                             datatype: 'json'
                         })
