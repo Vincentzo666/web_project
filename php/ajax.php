@@ -20,6 +20,7 @@ $lms = new lms();
 // }
 
 if (isset($_POST['stdview'])) {
+
 	$id = $_POST['stdview'];
 	$show_std = $lms->select('student', "*", "id='$id'");
 
@@ -40,28 +41,76 @@ if (isset($_POST['stdview'])) {
 	}
 }
 
+if (isset($_POST['timestart']) && isset($_POST['subid'])) {
 
-if (isset($_POST['timestart'])) {
 	$timestart = $_POST['timestart'];
 	$subid = $_POST['subid'];
 
-	$addcroom = $lms->insert('classroom',["id_subject"=>$subid,"stime"=>$timestart]);
+	$addcroom = $lms->insert('classroom', ["id_subject" => $subid, "stime" => $timestart]);
 
 	if ($addcroom) {
 
 		$last_id = $lms->dbConnect->insert_id;
 
-		echo json_encode(array('success' => 1,'last_id' => $last_id));
+		echo json_encode(array('success' => 1, 'last_id' => $last_id));
 	}
 }
 
-if (isset($_POST['timestop'])) {
+if (
+	isset($_POST['std_checkin']) && isset($_POST['std_checkin']) &&
+	isset($_POST['sub_checkin']) && isset($_POST['time_checkin'])
+) {
+
+	$cr_checkin = $_POST['cr_checkin'];
+	$std_checkin = $_POST['std_checkin'];
+	$sub_checkin = $_POST['sub_checkin'];
+	$time_checkin = $_POST['time_checkin'];
+
+	$chekstdsub = $lms->select('sub_std', "*", "id_subject='$sub_checkin' AND id_student = '$std_checkin'");
+
+	if ($chekstdsub) {
+
+		$checkstd = $lms->select('checkin', "*", "id_croom='$cr_checkin' AND id_std = '$std_checkin'");
+
+		if (!$checkstd) {
+
+			$checkin = $lms->insert('checkin', ["id_croom" => $cr_checkin, "id_sub" => $sub_checkin, "id_std" => $std_checkin, "ctime" => $time_checkin]);
+
+			if ($checkin) {
+
+				//$resultck = $lms->select('student s JOIN checkin c  ON s.id = c.id_std', "std_id,prefix,fname,lname", "c.id_croom ='$cr_checkin'");
+
+				$resultck = $lms->select('student s JOIN checkin c  ON s.id = c.id_std', "std_id,prefix,fname,lname", "c.id_croom ='$cr_checkin' AND s.id = '$std_checkin'");
+
+				echo json_encode(array(
+					'success' => 1,
+					'resultck1' => $resultck[0]['std_id'],
+					'resultck2' => $resultck[0]['prefix'],
+					'resultck3' => $resultck[0]['fname'],
+					'resultck4' => $resultck[0]['lname'],
+				));
+			} else {
+				echo json_encode(array('success' => 2));
+			}
+		} else {
+			echo json_encode(array('success' => 2));
+		}
+	} else {
+		echo json_encode(array('success' => 2));
+	}
+}
+
+if (isset($_POST['timestop']) && isset($_POST['thisid']) && isset($_POST['totaltime'])) {
+
 	$timestop = $_POST['timestop'];
 	$thisid = $_POST['thisid'];
+	$totaltime = $_POST['totaltime'];
 
-	$upcroom = $lms->update('classroom', ["etime" => $timestop], "id='$thisid'");
+	$upcroom = $lms->update('classroom', ["etime" => $timestop, "totaltime" => $totaltime], "id='$thisid'");
 
 	if ($upcroom) {
 		echo json_encode(array('success' => 1));
+	} else {
+		echo json_encode(array('success' => 2));
 	}
 }
