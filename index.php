@@ -56,10 +56,6 @@ include("inc/navbar.php");
             case "subject_view":
                 include("view/subject_view.php");
                 break;
-
-            case "subject_select_std":
-                include("view/subject_select_std.php");
-                break;
                 
             case "student_list":
                 include("view/student_list.php");
@@ -76,23 +72,11 @@ include("inc/navbar.php");
             case "student_view":
                 include("view/student_view.php");
                 break;
-
-            case "student_train":
-                include("view/student_train.php");
+                
+            case "subject_select_std":
+                include("view/subject_select_std.php");
                 break;
                 
-            case "classroom":
-                include("view/classroom.php");
-                break;
-            
-            case "report":
-                include("view/report.php");
-                break;
-
-            case "report_detail":
-                include("view/report_detail.php");
-                break;
-            
             default:
             include("view/subject_list.php");
         }

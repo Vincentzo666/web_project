@@ -1,13 +1,4 @@
 <?php 
-
-    if(!isset($_SESSION['id_teacher'])){
-
-        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
-        echo "<script>window.location.href='auth/login.php';</script>";
-        exit;
-        
-    }
-
     if(isset($_POST["action"]) && $_POST["action"]=='subject_add'){
         
         if (!empty($_POST['subject_id']) && !empty($_POST['subject_name'])) {

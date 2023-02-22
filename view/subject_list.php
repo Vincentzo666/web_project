@@ -1,49 +1,40 @@
 <?php 
+$_SESSION['sx']='name ASC';
+$sqlx = '';
 
-    if(!isset($_SESSION['id_teacher'])){
+if(isset($_POST['search'])){
+    $input_search = $_POST['search'];
+    $_SESSION['keyword_subject'] = $input_search;
+    $_SESSION['subject_sx'] = " AND name LIKE '%$input_search%'";
+    
+}
 
-        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
-        echo "<script>window.location.href='auth/login.php';</script>";
+if(!isset($_SESSION['keyword_subject'])){
+    $_SESSION['keyword_subject']='';
+}
+
+if(isset($_SESSION['subject_sx'])){
+    $sqlx = $_SESSION['subject_sx'];
+}
+
+if(isset($_GET['delete_subject'])){
+    
+    $id = $_GET['delete_subject'];
+    $del_std = $lms->delete('subject',"id='$id'");
+
+    if(!empty($del_std)) {
+                                
+        $_SESSION['success'] = "ลบรายวิชานี้สำเร็จ!";
+        echo "<script>window.history.back();</script>";
         exit;
         
-    }
-
-    $_SESSION['sx']='name ASC';
-    $sqlx = '';
-
-    if(isset($_POST['search'])){
-        $input_search = $_POST['search'];
-        $_SESSION['keyword_subject'] = $input_search;
-        $_SESSION['subject_sx'] = " AND name LIKE '%$input_search%'";
+    } else {
         
-    }
-
-    if(!isset($_SESSION['keyword_subject'])){
-        $_SESSION['keyword_subject']='';
-    }
-
-    if(isset($_SESSION['subject_sx'])){
-        $sqlx = $_SESSION['subject_sx'];
-    }
-
-    if(isset($_GET['delete_subject'])){
+        whenerror();
+        exit;
         
-        $id = $_GET['delete_subject'];
-        $del_std = $lms->delete('subject',"id='$id'");
-
-        if(!empty($del_std)) {
-                                    
-            $_SESSION['success'] = "ลบรายวิชานี้สำเร็จ!";
-            echo "<script>window.history.back();</script>";
-            exit;
-            
-        } else {
-            
-            whenerror();
-            exit;
-            
-        }   
-    }
+    }   
+}
 ?>
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
@@ -123,11 +114,7 @@
                                 <div class="btn-group">
                                     <a type="button" class="btn btn-sm btn-outline-success px-2 "
                                         href="?page=subject_view&subid=<?= $subject_list['id'] ?>">view</a>
-                                    <a type="button" class="btn btn-sm btn-outline-primary px-2 "
-                                        href="?page=classroom&subid=<?= $subject_list['id'] ?>">start</a>
                                     <a type="button" class="btn btn-sm btn-outline-secondary px-2 "
-                                        href="?page=report&subid=<?= $subject_list['id'] ?>">report</a>
-                                    <a type="button" class="btn btn-sm btn-outline-warning px-2 "
                                         href="?page=subject_edit&subid=<?= $subject_list['id'] ?>">edit</a>
                                     <a type="button" class="btn btn-sm btn-outline-danger px-2 delete_subject"
                                         id="<?= $subject_list['id'] ?>"
