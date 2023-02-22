@@ -9,7 +9,11 @@
                     <div class="ps-3">
                         <div class="row">
                             <div class="col-sm-12 text-secondary">
+<<<<<<< HEAD
                                 <img src="upload/img_student/<?= $show_std[0]['std_pic'] ?>"
+=======
+                                <img src="" id="result1"
+>>>>>>> parent of 1d98f7a (success)
                                     style=" width: 220px; height: 220px; object-fit: cover;">
                             </div>
                         </div>
