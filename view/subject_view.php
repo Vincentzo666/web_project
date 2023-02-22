@@ -155,9 +155,17 @@
                                                 data-bs-toggle="dropdown" aria-expanded="false"><b>เลือก</b>
                                             </button>
                                             <ul class="dropdown-menu">
+<<<<<<< HEAD
                                                 <li>
                                                     <a class="dropdown-item"
                                                         href="?page=subject_view&subid=<?= $subid ?>&show_std=<?= $student_list['id_student'] ?>">view</a>
+=======
+                                                <li><a class="dropdown-item stdview" id="<?= $student_list['id_student'] ?>"
+                                                        data-bs-toggle="modal" data-bs-target="#studentModal">view</a>
+                                                </li>
+                                                <li><a class="dropdown-item" 
+                                                     href="?page=student_train&id=<?= $student_list['id_student'] ?>">train</a>
+>>>>>>> parent of 1d98f7a (success)
                                                 </li>
                                                 <li><a class="dropdown-item"
                                                         href="?page=student_edit&id=<?= $student_list['id_student'] ?>&backp=<?= $subid ?>">edit</a>

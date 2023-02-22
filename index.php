@@ -77,6 +77,17 @@ include("inc/navbar.php");
                 include("view/subject_select_std.php");
                 break;
                 
+<<<<<<< HEAD
+=======
+            case "classroom":
+                include("view/classroom.php");
+                break;
+            
+            case "report":
+                include("view/report.php");
+                break;
+            
+>>>>>>> parent of 1d98f7a (success)
             default:
             include("view/subject_list.php");
         }
