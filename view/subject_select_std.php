@@ -1,13 +1,4 @@
 <?php
-
-    if(!isset($_SESSION['id_teacher'])){
-
-        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
-        echo "<script>window.location.href='auth/login.php';</script>";
-        exit;
-        
-    }
-
     unset($_SESSION['subid']);
 
     if(isset($_GET['subid'])){
@@ -37,17 +28,6 @@
     }
 
     if(isset($_GET['delete_student'])){
-
-        function remove_json_row($json, $field, $to_find) {
-
-            for($i = 0, $len = count($json); $i < $len; ++$i) {
-                if ($json[$i][$field] == $to_find) {
-                    array_splice($json, $i, 1); 
-                }   
-            }   
-    
-            return $json;
-        }  
         
         $delid = $_GET['delete_student'];
         $del_std = $lms->delete('student',"id='$delid'");
@@ -55,13 +35,6 @@
         if(!empty($del_std)) {
                                     
             $_SESSION['success'] = "ลบรายชื่อนี้สำเร็จ!";
-            
-            $json = file_get_contents('data/neural.json');
-            $decoded = json_decode($json, true);
-            $decoded = remove_json_row($decoded, 'std_id', $id);
-            $json = json_encode($decoded);
-            file_put_contents('data/neural.json', $json);
-
             echo "<script>window.history.back();</script>";
             exit;
             
@@ -70,9 +43,16 @@
             whenerror();
             exit;
             
-        }
+        }   
     }
 
+    if(isset($_GET['show_std'])){
+
+        $idsh = $_GET['show_std'];
+        
+        $show_std = $lms->select('student',"*","id='$idsh'");        
+
+    }
 ?>
 <div class="album py-5 " style="background-color:#f0f8ff;">
     <div class="container">
@@ -103,7 +83,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="main-box clearfix">
-                        <table class="table user-list" id="studentTable">
+                        <table class="table user-list" id="example">
                             <thead>
                                 <tr>
                                     <th style="width:7%;"><span>รูปภาพ</span></th>
@@ -146,11 +126,8 @@
                                             data-bs-toggle="dropdown" aria-expanded="false"><b>เลือก</b>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item stdview" id="<?= $student_list['id'] ?>"
-                                                    data-bs-toggle="modal" data-bs-target="#studentModal">view</a>
-                                            </li>
-                                            <li><a class="dropdown-item" 
-                                                     href="?page=student_train&id=<?= $student_list['id'] ?>">train</a>
+                                            <li><a class="dropdown-item"
+                                                    href="?page=subject_select_std&subid=<?= $subid ?>&show_std=<?= $student_list['id'] ?>">view</a>
                                             </li>
                                             <li><a class="dropdown-item"
                                                     href="?page=student_edit&subid=<?= $subid ?>&id=<?= $student_list['id'] ?>">edit</a>
@@ -171,9 +148,8 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
-        $('#studentTable').DataTable();
-    });
+$(document).ready(function() {
+    $(' #example').DataTable();
 
     $(document).on('click', '.delete_student', function() {
         var id = $(this).attr("id");
@@ -194,44 +170,28 @@
         });
     });
 
-    $(document).on('click', '.stdview', function() {
-        var id = $(this).attr("id");
+    $(document).on('click', '.dmbtn', function() {
 
-        if (id != "") {
-            $.ajax({
-                type: "POST",
-                url: "http://localhost/web_project/php/ajax.php",
-                data: {
-                    stdview: id
-                },
-                success: function(response) {
-                    var jsonData = JSON.parse(response);
-                    if (jsonData.success == "1") {
-
-                        $('#result1').attr("src","upload/img_student/"+jsonData.result1);
-                        $('#result2').html(jsonData.result2);
-                        $('#result3').html(jsonData.result3);
-                        $('#result4').html(jsonData.result4);
-                        $('#result5').html(jsonData.result5);
-                        $('#result6').html(jsonData.result6);
-                        $('#result7').html(jsonData.result7);
-
-                    } else if (jsonData.success == "2") {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: 'ไม่พบข้อมูลนี้',
-                            showConfirmButton: true,
-                            timer: '5000'
-                        })
-
-                    } else {
-                        console.log("no value")
-                    }
-                }
-            });
-        }
+        window.history.back();
     });
 
+    function stdshow() {
+
+        $('#studentModal').modal('show');
+
+    }
+
+    $('#studentModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    <?php if(isset($_GET['show_std'])){?>
+
+    $('#studentModal').modal('show');
+
+
+    <?php } ?>
+});
 </script>
 <?php include('view/student_view.php') ?>

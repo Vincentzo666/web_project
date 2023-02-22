@@ -1,13 +1,5 @@
 <?php
 
-    if(!isset($_SESSION['id_teacher'])){
-
-        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
-        echo "<script>window.location.href='auth/login.php';</script>";
-        exit;
-        
-    }
-
     unset($_SESSION['subid']);
     unset($_SESSION['backp']);
 
@@ -36,6 +28,14 @@
             exit;
             
         }   
+    }
+
+    if(isset($_GET['show_std'])){
+
+        $idsh = $_GET['show_std'];
+        
+        $show_std = $lms->select('student',"*","id='$idsh'");        
+
     }
 
 ?>
@@ -117,7 +117,7 @@
                                         <i class="fa-solid fa-file-circle-plus"></i>&nbsp;เพิ่มรายชื่อเข้าชั้นเรียน</a>
                                 </div>
                             </div>
-                            <table class="table user-list" id="studentTable">
+                            <table class="table user-list" id="example">
                                 <thead>
                                     <tr>
                                         <th style="width:13%;"><span>รูปภาพ</span></th>
@@ -155,11 +155,9 @@
                                                 data-bs-toggle="dropdown" aria-expanded="false"><b>เลือก</b>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item stdview" id="<?= $student_list['id_student'] ?>"
-                                                        data-bs-toggle="modal" data-bs-target="#studentModal">view</a>
-                                                </li>
-                                                <li><a class="dropdown-item" 
-                                                        href="?page=student_train&id=<?= $student_list['id_student'] ?>">train</a>
+                                                <li>
+                                                    <a class="dropdown-item"
+                                                        href="?page=subject_view&subid=<?= $subid ?>&show_std=<?= $student_list['id_student'] ?>">view</a>
                                                 </li>
                                                 <li><a class="dropdown-item"
                                                         href="?page=student_edit&id=<?= $student_list['id_student'] ?>&backp=<?= $subid ?>">edit</a>
@@ -183,10 +181,10 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
 
-        $('#studentTable').DataTable();
-    });
+    $(' #example').DataTable();
+
     $(document).on('click', '.delete_student', function() {
         var id = $(this).attr("id");
         var name_std = $(this).attr("data-name-std");
@@ -206,43 +204,28 @@
         });
     });
 
-    $(document).on('click', '.stdview', function() {
-        var id = $(this).attr("id");
+    $(document).on('click', '.dmbtn', function() {
 
-        if (id != "") {
-            $.ajax({
-                type: "POST",
-                url: "http://localhost/web_project/php/ajax.php",
-                data: {
-                    stdview: id
-                },
-                success: function(response) {
-                    var jsonData = JSON.parse(response);
-                    if (jsonData.success == "1") {
-
-                        $('#result1').attr("src","upload/img_student/"+jsonData.result1);
-                        $('#result2').html(jsonData.result2);
-                        $('#result3').html(jsonData.result3);
-                        $('#result4').html(jsonData.result4);
-                        $('#result5').html(jsonData.result5);
-                        $('#result6').html(jsonData.result6);
-                        $('#result7').html(jsonData.result7);
-
-                    } else if (jsonData.success == "2") {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: 'ไม่พบข้อมูลนี้',
-                            showConfirmButton: true,
-                            timer: '5000'
-                        })
-
-                    } else {
-                        console.log("no value")
-                    }
-                }
-            });
-        }
+        window.history.back();
     });
+
+    function stdshow() {
+
+        $('#studentModal').modal('show');
+
+    }
+
+    $('#studentModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    <?php if(isset($_GET['show_std'])){?>
+
+    $('#studentModal').modal('show');
+
+
+    <?php } ?>
+});
 </script>
 <?php include('view/student_view.php') ?>
