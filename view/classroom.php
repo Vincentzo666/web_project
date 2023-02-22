@@ -79,6 +79,12 @@ if (isset($_GET['subid'])) {
           <th style="width:30%;"><span>นามสกุล</span></th>
         </tr>
       </thead>
+      <tr id="exerow">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
     </table>
   </div>
 </div>
@@ -316,7 +322,7 @@ if (isset($_GET['subid'])) {
                   success: function(response) {
                     var jsonData = JSON.parse(response);
                     if (jsonData.success == "1") {
-                      console.log(jsonData.resultck1);
+                      $('#exerow').remove();
                       $('#checkinTable').append(`<tr><td>${jsonData.resultck1}</td><td>${jsonData.resultck2}</td><td>${jsonData.resultck3}</td><td>${jsonData.resultck4}</td></tr>`);
 
                       // $('#result1').attr("src", "upload/img_student/" + jsonData.result1);

@@ -88,6 +88,10 @@ include("inc/navbar.php");
             case "report":
                 include("view/report.php");
                 break;
+
+            case "report_detail":
+                include("view/report_detail.php");
+                break;
             
             default:
             include("view/subject_list.php");

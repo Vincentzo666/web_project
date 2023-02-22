@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="col-sm-12 text-secondary">
                                 <img src="" id="result1"
-                                    style=" width: 220px; height: 220px; object-fit: cover;">
+                                    style=" width: 200px; height: 200px; object-fit: cover;">
                             </div>
                         </div>
                         <hr>

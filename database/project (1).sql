@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 02, 2023 at 07:49 AM
+-- Generation Time: Feb 22, 2023 at 04:24 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -20,6 +20,48 @@ SET time_zone = "+00:00";
 --
 -- Database: `project`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `checkin`
+--
+
+CREATE TABLE `checkin` (
+  `id` int(11) NOT NULL,
+  `id_croom` int(11) NOT NULL,
+  `id_sub` int(11) NOT NULL,
+  `id_std` int(11) NOT NULL,
+  `ctime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `checkin`
+--
+
+INSERT INTO `checkin` (`id`, `id_croom`, `id_sub`, `id_std`, `ctime`) VALUES
+(2, 1, 29, 9, '2023-02-21 16:42:09');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `classroom`
+--
+
+CREATE TABLE `classroom` (
+  `id` int(11) NOT NULL,
+  `id_subject` int(11) NOT NULL,
+  `stime` datetime NOT NULL,
+  `etime` datetime DEFAULT NULL,
+  `totaltime` time DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `classroom`
+--
+
+INSERT INTO `classroom` (`id`, `id_subject`, `stime`, `etime`, `totaltime`) VALUES
+(1, 29, '2023-02-21 16:42:09', '2023-02-21 16:42:09', '00:00:24');
 
 -- --------------------------------------------------------
 
@@ -45,16 +87,10 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`id`, `std_id`, `prefix`, `fname`, `lname`, `email`, `phone`, `std_pic`, `cr_time`, `up_time`) VALUES
-(8, '111', '', 'ghm', 'b', 'b@gmail.com', '0807502947', 'aaa', '2023-02-01 03:53:43', '2023-02-01 14:33:19'),
-(9, '222', '', 'bbb', 'bbb', '', '099123456', 'bbb', '2023-02-01 03:53:43', '2023-02-02 13:33:55'),
-(10, '333', NULL, 'ccc', 'ccc', NULL, NULL, 'ccc', '2023-02-01 03:54:42', NULL),
-(11, '444', '', 'ddd', 'ddd', '', '000', 'ddd', '2023-02-01 03:54:42', '2023-02-01 11:59:33'),
+(9, '222', 'kk', 'BBB', 'bbb', '', '099123456', 'bbb-222.jpg', '2023-02-01 03:53:43', '2023-02-20 10:10:53'),
 (12, '555', NULL, 'eee', 'eee', NULL, NULL, 'eee', '2023-02-01 03:55:13', NULL),
-(13, '666', 'fff', 'fff', '', NULL, NULL, 'fff', '2023-02-01 03:55:13', NULL),
 (14, '62114340160', 'นาย', 'j', 'k', '', '', 'student-20230201131839.png', '2023-02-01 13:18:39', NULL),
-(15, '621143401', 'นาง', 'ghm', 'b', 'yub@gmail.com', '', 'student-20230201133158.png', '2023-02-01 13:31:58', NULL),
-(16, '64853864564', 'นาย', 'ghm', 'b', 'yub@gmail.com', '', 'student-20230201133257.png', '2023-02-01 13:32:57', NULL),
-(17, '777', 'นาย', 'j', 'k', '', '', 'student-20230202133613.png', '2023-02-02 13:36:13', NULL);
+(16, '64853864564', 'นาย', 'ghm', 'b', 'yub@gmail.com', '', 'student-20230201133257.png', '2023-02-01 13:32:57', NULL);
 
 -- --------------------------------------------------------
 
@@ -100,13 +136,9 @@ CREATE TABLE `sub_std` (
 --
 
 INSERT INTO `sub_std` (`id`, `id_subject`, `id_student`, `cr_time`, `up_time`) VALUES
-(9, 29, 8, '2023-02-01 03:57:39', NULL),
 (10, 29, 9, '2023-02-01 03:57:39', NULL),
-(11, 30, 10, '2023-02-01 03:58:07', NULL),
-(12, 30, 11, '2023-02-01 03:58:07', NULL),
 (14, 30, 9, '2023-02-01 03:58:44', NULL),
-(15, 29, 10, '2023-02-01 14:01:54', NULL),
-(16, 29, 11, '2023-02-01 14:02:07', NULL);
+(17, 29, 14, '2023-02-08 09:27:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -140,6 +172,22 @@ INSERT INTO `teacher` (`id`, `prefix`, `fname`, `lname`, `email`, `phone`, `prof
 --
 
 --
+-- Indexes for table `checkin`
+--
+ALTER TABLE `checkin`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_std` (`id_std`),
+  ADD KEY `id_sub` (`id_sub`),
+  ADD KEY `id_croom` (`id_croom`);
+
+--
+-- Indexes for table `classroom`
+--
+ALTER TABLE `classroom`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `classroom_ibfk_1` (`id_subject`);
+
+--
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
@@ -171,6 +219,18 @@ ALTER TABLE `teacher`
 --
 
 --
+-- AUTO_INCREMENT for table `checkin`
+--
+ALTER TABLE `checkin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `classroom`
+--
+ALTER TABLE `classroom`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
@@ -186,7 +246,7 @@ ALTER TABLE `subject`
 -- AUTO_INCREMENT for table `sub_std`
 --
 ALTER TABLE `sub_std`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `teacher`
@@ -197,6 +257,20 @@ ALTER TABLE `teacher`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `checkin`
+--
+ALTER TABLE `checkin`
+  ADD CONSTRAINT `checkin_ibfk_1` FOREIGN KEY (`id_std`) REFERENCES `student` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `checkin_ibfk_2` FOREIGN KEY (`id_sub`) REFERENCES `subject` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `checkin_ibfk_3` FOREIGN KEY (`id_croom`) REFERENCES `classroom` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `classroom`
+--
+ALTER TABLE `classroom`
+  ADD CONSTRAINT `classroom_ibfk_1` FOREIGN KEY (`id_subject`) REFERENCES `subject` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `subject`

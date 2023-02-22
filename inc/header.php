@@ -57,7 +57,7 @@ session_start();
 </head>
 <!-- style="background-color:#212529;" -->
 
-<body class="bg-light">
+<body style="background-color:#f0f8ff;">
     <?php
     include("alert.php");
     date_default_timezone_set('Asia/Bangkok');

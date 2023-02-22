@@ -159,7 +159,7 @@
                                                         data-bs-toggle="modal" data-bs-target="#studentModal">view</a>
                                                 </li>
                                                 <li><a class="dropdown-item" 
-                                                     href="?page=student_train&id=<?= $student_list['id_student'] ?>">train</a>
+                                                        href="?page=student_train&id=<?= $student_list['id_student'] ?>">train</a>
                                                 </li>
                                                 <li><a class="dropdown-item"
                                                         href="?page=student_edit&id=<?= $student_list['id_student'] ?>&backp=<?= $subid ?>">edit</a>
