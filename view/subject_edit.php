@@ -1,11 +1,23 @@
 <?php 
 
+    if(!isset($_SESSION['id_teacher'])){
+
+        $_SESSION['error'] = "กรุณาเข้าสู่ระบบใหม่อีกครั้ง!";
+        echo "<script>window.location.href='auth/login.php';</script>";
+        exit;
+        
+    }
+
     if(isset($_GET['subid'])){
 
         $id = $_GET['subid'];
         
         $subject = $lms->select('subject',"*","id='$id'");
     
+    }else{
+        $_SESSION['error'] = "เกิดข้อผิดพลาด! ไม่พบข้อมูล!";
+        echo "<script> window.history.back()</script>";
+        exit;
     }
 
     if(isset($_POST["action"]) && $_POST["action"]=='subject_edit'){
@@ -117,7 +129,7 @@
 
         <div class="d-flex justify-content-center">
             <div class="py-3 p-md-5 bg-light rounded-5 shadow-lg col-md-8">
-                <form action="?page=subject_edit" method="post" class="px-0 pt-3" enctype="multipart/form-data">
+                <form action="?page=subject_edit&subid=<?= $subject[0]['id'] ?>" method="post" class="px-0 pt-3" enctype="multipart/form-data">
                     <div class="row mb-3 d-flex justify-content-center">
                         <label for="input" class="col-sm-2 col-form-label">รหัสวิชา
                             <span class="text-danger">*</span>
